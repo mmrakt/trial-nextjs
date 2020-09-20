@@ -1,5 +1,6 @@
 import React from "react";
 import { TextField } from "@material-ui/core";
+import AddIcon from "@material-ui/icons/Add";
 
 function Input({ onAdd }) {
   const [text, setText] = React.useState("");
@@ -11,14 +12,17 @@ function Input({ onAdd }) {
     }
   };
   return (
-    <div>
+    <>
       <TextField
+        fullWidth
         type="text"
         value={text}
+        placeholder="Add Todo"
         onChange={handleChange}
         onKeyDown={handleKeyDown}
       ></TextField>
-    </div>
+      <AddIcon />
+    </>
   );
 }
 

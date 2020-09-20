@@ -1,13 +1,14 @@
 import React from "react";
 import Input from "./TodoInput";
 import Filter from "./TodoFilter";
-import TodoItem from "./TodoItem";
+import TodoTabPanel from "./TodoTabPanel";
 
 function Todo() {
   const [todos, setTodos] = React.useState([]);
-  const [filter, setFilter] = React.useState("ALL");
-
+  const [filter, setFilter] = React.useState("TODO");
+  const statuses = ["ALL", "TODO", "DONE"];
   const getKey = () => Math.random().toString(32).substring(2);
+
   const handleAdd = (text) => {
     setTodos([...todos, { key: getKey(), text, done: false }]);
   };
@@ -21,20 +22,32 @@ function Todo() {
     });
     setTodos(newTodos);
   };
-  const displayTodos = todos.filter((todo) => {
-    if (filter === "ALL") return true;
-    if (filter === "TODO") return !todo.done;
-    if (filter === "DONE") return todo.done;
-  });
-
+  const handleDelete = (key) => {
+    const newTodos = todos.map((todo) => {
+      if (todo) {
+        if (todo.key !== key) {
+          return todo;
+        }
+      }
+    });
+    setTodos(newTodos);
+  };
   return (
     <div>
       <div>React Todo</div>
       {/* onAdd: リスト内に要素が追加された時 */}
       <Input onAdd={handleAdd}></Input>
       <Filter onChange={handleFilterChange} value={filter}></Filter>
-      {displayTodos.map((todo) => (
-        <TodoItem key={todo.text} todo={todo} onCheck={handleCheck}></TodoItem>
+      {statuses.map((status, index) => (
+        <TodoTabPanel
+          key={index}
+          status={status}
+          filter={filter}
+          hidden={filter !== status}
+          todos={todos}
+          onChange={handleCheck}
+          onDelete={handleDelete}
+        />
       ))}
     </div>
   );

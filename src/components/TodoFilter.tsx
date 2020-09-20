@@ -1,25 +1,17 @@
+import Tabs from "@material-ui/core/Tabs";
+import Tab from "@material-ui/core/Tab";
+
 function Filter({ value, onChange }) {
-  const handleClick = (key, e) => {
-    e.preventDefault();
-    onChange(key);
+  const handleChange = (event, newValue) => {
+    onChange(newValue);
   };
   return (
     <>
-      <div>
-        <a href="#" onClick={handleClick.bind(null, "ALL")}>
-          ALL
-        </a>
-      </div>
-      <div>
-        <a href="#" onClick={handleClick.bind(null, "TODO")}>
-          TODO
-        </a>
-      </div>
-      <div>
-        <a href="#" onClick={handleClick.bind(null, "DONE")}>
-          DONE
-        </a>
-      </div>
+      <Tabs value={value} onChange={handleChange}>
+        <Tab label="ALL" value="ALL" />
+        <Tab label="TODO" value="TODO" />
+        <Tab label="DONE" value="DONE" />
+      </Tabs>
     </>
   );
 }
