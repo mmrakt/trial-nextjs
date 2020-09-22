@@ -4,15 +4,16 @@ import Document, {
   Head,
   Main,
   NextScript,
-} from "next/document";
-import { ServerStyleSheet as StyledComponentSheets } from "styled-components";
-import { ServerStyleSheets as MaterialUiServerStyleSheets } from "@material-ui/styles";
+} from 'next/document'
+import React from 'react'
+import { ServerStyleSheet as StyledComponentSheets } from 'styled-components'
+import { ServerStyleSheets as MaterialUiServerStyleSheets } from '@material-ui/styles'
 
 export default class MyDocument extends Document {
-  static async getInitialProps(ctx: DocumentContext) {
-    const styledComponentSheets = new StyledComponentSheets();
-    const materialUiServerStyleSheets = new MaterialUiServerStyleSheets();
-    const originalRenderPage = ctx.renderPage;
+  static async getInitialProps(ctx: DocumentContext): Promise<any> {
+    const styledComponentSheets = new StyledComponentSheets()
+    const materialUiServerStyleSheets = new MaterialUiServerStyleSheets()
+    const originalRenderPage = ctx.renderPage
 
     try {
       ctx.renderPage = () =>
@@ -21,9 +22,9 @@ export default class MyDocument extends Document {
             styledComponentSheets.collectStyles(
               materialUiServerStyleSheets.collect(<App {...props} />)
             ),
-        });
+        })
 
-      const initialProps = await Document.getInitialProps(ctx);
+      const initialProps = await Document.getInitialProps(ctx)
       return {
         ...initialProps,
         styles: (
@@ -33,13 +34,13 @@ export default class MyDocument extends Document {
             {materialUiServerStyleSheets.getStyleElement()}
           </>
         ),
-      };
+      }
     } finally {
-      styledComponentSheets.seal();
+      styledComponentSheets.seal()
     }
   }
 
-  render() {
+  render(): any {
     return (
       <Html lang="ja">
         <Head />
@@ -48,6 +49,6 @@ export default class MyDocument extends Document {
           <NextScript />
         </body>
       </Html>
-    );
+    )
   }
 }

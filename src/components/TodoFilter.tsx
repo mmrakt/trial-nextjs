@@ -1,10 +1,16 @@
-import Tabs from "@material-ui/core/Tabs";
-import Tab from "@material-ui/core/Tab";
+import React from 'react'
+import Tabs from '@material-ui/core/Tabs'
+import Tab from '@material-ui/core/Tab'
 
-function Filter({ value, onChange }) {
+type Props = {
+  value: string
+  onChange: (value: string) => void
+}
+function Filter(props: Props): any {
+  const { value, onChange } = props
   const handleChange = (event, newValue) => {
-    onChange(newValue);
-  };
+    onChange(newValue)
+  }
   return (
     <>
       <Tabs value={value} onChange={handleChange}>
@@ -13,7 +19,7 @@ function Filter({ value, onChange }) {
         <Tab label="DONE" value="DONE" />
       </Tabs>
     </>
-  );
+  )
 }
 
-export default Filter;
+export default Filter
