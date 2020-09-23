@@ -1,17 +1,17 @@
 import React from 'react'
 import { TextField } from '@material-ui/core'
 import AddIcon from '@material-ui/icons/Add'
+import { useDispatch } from 'react-redux'
+import { handleAdd } from '../modules/todoModule'
 
-type Props = {
-  onAdd: (text: string) => void
-}
-function Input(props: Props): any {
-  const { onAdd } = props
+function Input(): any {
+  const dispatch = useDispatch()
   const [text, setText] = React.useState('')
+
   const handleChange = (e) => setText(e.target.value)
   const handleKeyDown = (e) => {
     if (e.key === 'Enter') {
-      onAdd(text)
+      dispatch(handleAdd(text))
       setText('')
     }
   }
