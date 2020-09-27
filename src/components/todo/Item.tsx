@@ -5,7 +5,7 @@ import Checkbox from '@material-ui/core/Checkbox'
 import Divider from '@material-ui/core/Divider'
 import DeleteIcon from '@material-ui/icons/Delete'
 import { useDispatch } from 'react-redux'
-import { handleCheck, handleDelete } from '../modules/todoModule'
+import { handleCheck, handleDelete } from '../../modules/todoModule'
 
 type Props = {
   todo: {

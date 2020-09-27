@@ -20,7 +20,9 @@ const initialState: State = {
 const todoModule = createSlice({
   name: 'todos',
   initialState,
+  // reducers
   reducers: {
+    // action creator
     handleAdd(state: State, action: PayloadAction<string>) {
       const getKey = Math.random().toString(32).substring(2)
       const newTodo: Todo = {

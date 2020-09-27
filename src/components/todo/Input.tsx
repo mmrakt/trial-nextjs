@@ -2,7 +2,8 @@ import React from 'react'
 import { TextField } from '@material-ui/core'
 import AddIcon from '@material-ui/icons/Add'
 import { useDispatch } from 'react-redux'
-import { handleAdd } from '../modules/todoModule'
+import { handleAdd } from '../../modules/todoModule'
+import { db } from '../../../functions/firebase'
 
 function Input(): any {
   const dispatch = useDispatch()
@@ -12,6 +13,11 @@ function Input(): any {
   const handleKeyDown = (e) => {
     if (e.key === 'Enter') {
       dispatch(handleAdd(text))
+
+      db.collection('todos').add({
+        text,
+        done: false,
+      })
       setText('')
     }
   }

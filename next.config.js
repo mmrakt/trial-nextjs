@@ -1,11 +1,13 @@
-const { resolve } = require('path')
-
-const nextConfig = {
+const webpack = require('webpack')
+require('dotenv').config()
+module.exports = {
+  // dotenv
   webpack: (config) => {
-    // src ディレクトリをエイリアスのルートに設定
-    config.resolve.alias['@'] = resolve(__dirname, 'src')
+    const env = Object.keys(process.env).reduce((acc, curr) => {
+      acc[`process.env.${curr}`] = JSON.stringify(process.env[curr])
+      return acc
+    }, {})
+    config.plugins.push(new webpack.DefinePlugin(env))
     return config
   },
 }
-
-module.exports = nextConfig
