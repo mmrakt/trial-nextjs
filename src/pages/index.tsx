@@ -1,12 +1,20 @@
 import React from 'react'
+import PropTypes from 'prop-types'
+import Layout from '../components/Layout'
 import Todo from '../components/todo/index'
 
-export default function Index(): any {
+const Index = (): React.ReactElement => {
   return (
     <>
-      <main>
+      <Layout title="Dashboard">
         <Todo />
-      </main>
+      </Layout>
     </>
   )
 }
+
+Index.propTypes = {
+  children: PropTypes.node,
+}
+
+export default Index

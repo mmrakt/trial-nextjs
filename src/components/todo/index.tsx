@@ -2,17 +2,14 @@ import React from 'react'
 import Input from './Input'
 import Filter from './Filter'
 import TodoTabPanel from './TabPanel'
-import Layout from '../layout'
+import Layout from '../Layout'
 import { Box, Container, Typography } from '@material-ui/core'
 
-function Todo(): any {
+const Todo = (): React.ReactElement => {
   const statuses = ['ALL', 'TODO', 'DONE']
   return (
     <Layout>
       <Container maxWidth="sm">
-        <div>s</div>
-        <div>s</div>
-        <div>s</div>
         <Box my={4}>
           <Typography variant="h4" component="h1" gutterBottom>
             Next.js example

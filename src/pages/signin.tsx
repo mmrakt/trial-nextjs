@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import firebase from 'firebase'
 import { db } from '../../functions/firebase'
 import StyledFirebaseAuth from 'react-firebaseui/StyledFirebaseAuth'
-import Layout from '../components/layout'
+import Layout from '../components/Layout'
 import { Container } from '@material-ui/core'
 
 function signin() {
