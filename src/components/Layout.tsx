@@ -1,4 +1,4 @@
-import React, { ReactElement } from 'react'
+import React from 'react'
 import PropTypes from 'prop-types'
 import Header from './Header'
 import Footer from './Footer'
@@ -31,7 +31,7 @@ type LayoutProps = {
   title: string
 }
 
-const Layout: React.FC<LayoutProps> = (props) => {
+const Layout = (props: LayoutProps): React.ReactElement => {
   const classes = useStyles()
   return (
     <div className={classes.root}>
