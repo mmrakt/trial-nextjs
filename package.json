@@ -9,7 +9,8 @@
     "lint": "eslint --ext .ts,.tsx ./src",
     "prettier-watch": "onchange '**/*.{ts,tsx,js}' -- prettier --config ./.prettierrc --write {{changed}}",
     "test": "jest",
-    "test:coverage": "jest --collect-coverage"
+    "test:coverage": "jest --collect-coverage",
+    "hasura": "hasura console --project hasura"
   },
   "dependencies": {
     "@apollo/client": "^3.2.2",
