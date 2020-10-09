@@ -9,6 +9,7 @@ import store from '../store'
 import { ApolloClient, InMemoryCache, HttpLink } from '@apollo/client'
 import { ApolloProvider } from '@apollo/react-hooks'
 import 'minireset.css'
+import '../base.css'
 export default function MyApp(props): any {
   const { Component, pageProps } = props
 
