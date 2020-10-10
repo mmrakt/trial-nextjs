@@ -3,6 +3,8 @@ import { useRouter } from 'next/router'
 import styles from './index.module.css'
 import { SiteHeaderItem } from './item'
 import { Button } from '../button'
+import { UserIcon } from '../user-icon'
+import { Logo } from '../logo'
 export { SiteHeaderItem }
 
 type Props = {
@@ -21,7 +23,7 @@ export const SiteHeader = (props: Props): React.ReactElement => {
     left
   ) : (
     <a onClick={handleClickLogo}>
-      <div>やばいブログ</div>
+      <Logo />
     </a>
   )
   const rightElement = right ? (
@@ -34,7 +36,7 @@ export const SiteHeader = (props: Props): React.ReactElement => {
         </Button>
       </SiteHeaderItem>
       <SiteHeaderItem>
-        <img className={styles.userIcon} src="/profile.png" />
+        <UserIcon src="/profile.png" />
       </SiteHeaderItem>
     </>
   )
