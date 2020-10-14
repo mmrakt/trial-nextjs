@@ -4,7 +4,7 @@ import ListItemText from '@material-ui/core/ListItemText'
 import Checkbox from '@material-ui/core/Checkbox'
 import Divider from '@material-ui/core/Divider'
 import DeleteIcon from '@material-ui/icons/Delete'
-import { useDispatch } from 'react-redux'
+// import { useDispatch } from 'react-redux'
 import { handleCheck, handleDelete } from '../../modules/todoModule'
 
 type Props = {
@@ -13,10 +13,11 @@ type Props = {
     text: string
     done: boolean
   }
+  onCheck: () => void
+  onDelete: (todo) => void
 }
 function TodoItem(props: Props): any {
-  const dispatch = useDispatch()
-  const { todo } = props
+  const { todo, onCheck, onDelete } = props
 
   return (
     <>
@@ -25,7 +26,7 @@ function TodoItem(props: Props): any {
           data-testid="checkbox"
           checked={todo.done}
           onChange={() => {
-            dispatch(handleCheck(todo))
+            onCheck
           }}
         ></Checkbox>
         <ListItemText
@@ -38,7 +39,7 @@ function TodoItem(props: Props): any {
         ></ListItemText>
         <DeleteIcon
           onClick={() => {
-            dispatch(handleDelete(todo))
+            onDelete(todo)
           }}
         ></DeleteIcon>
       </ListItem>

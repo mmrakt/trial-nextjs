@@ -50,19 +50,19 @@ const Drawer = (props: IProps): React.ReactElement => {
   const classes = useStyles()
   const DrawerListItem = [
     {
-      text: 'Dashboard',
+      text: 'ダッシュボード',
       link: '/',
     },
     {
-      text: 'Submit Report',
+      text: '日報の提出',
       link: '/submit',
     },
     {
-      text: 'Check Report',
+      text: '日報の提出状況確認',
       link: '/check',
     },
     {
-      text: 'Settings',
+      text: '設定',
       link: '/settings',
     },
   ]

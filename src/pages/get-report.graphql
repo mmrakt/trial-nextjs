@@ -1,0 +1,11 @@
+mutation PostReport(
+  $date: Int!
+  $createdAt: timestamptz
+  $updatedAt: timestamptz
+) {
+  insert_reports_one(
+    object: { date: $date, createdAt: $createdAt, updatedAt: $updatedAt }
+  ) {
+    id
+  }
+}

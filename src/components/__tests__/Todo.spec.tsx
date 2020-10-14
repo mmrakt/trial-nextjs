@@ -1,9 +1,9 @@
 import React from 'react'
 import renderer from 'react-test-renderer'
-import Todo from '../todo/index'
-import Input from '../todo/Input'
-import TodoItem from '../todo/Item'
-import TodoTabPanel from '../todo/TabPanel'
+import Todo from '../task/index'
+import Input from '../task/Input'
+import TodoItem from '../task/Item'
+import TodoTabPanel from '../task/TabPanel'
 import { shallow } from 'enzyme'
 
 test('Todo', () => {

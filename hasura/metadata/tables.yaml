@@ -14,6 +14,52 @@
       foreign_key_constraint_on: author_id
 - table:
     schema: public
+    name: categories
+  array_relationships:
+  - name: tasks
+    using:
+      foreign_key_constraint_on:
+        column: categoryId
+        table:
+          schema: public
+          name: tasks
+- table:
+    schema: public
+    name: hours
+  array_relationships:
+  - name: tasks
+    using:
+      foreign_key_constraint_on:
+        column: hourId
+        table:
+          schema: public
+          name: tasks
+- table:
+    schema: public
+    name: reports
+  array_relationships:
+  - name: tasks
+    using:
+      foreign_key_constraint_on:
+        column: reportId
+        table:
+          schema: public
+          name: tasks
+- table:
+    schema: public
+    name: tasks
+  object_relationships:
+  - name: category
+    using:
+      foreign_key_constraint_on: categoryId
+  - name: hour
+    using:
+      foreign_key_constraint_on: hourId
+  - name: report
+    using:
+      foreign_key_constraint_on: reportId
+- table:
+    schema: public
     name: users
   configuration:
     custom_root_fields: {}

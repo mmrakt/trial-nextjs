@@ -10,7 +10,7 @@
     "prettier-watch": "onchange '**/*.{ts,tsx,js}' -- prettier --config ./.prettierrc --write {{changed}}",
     "test": "jest --watch",
     "test:coverage": "jest --collect-coverage",
-    "hasura": "hasura console --project hasura"
+    "hasura cli": "hasura console --project hasura"
   },
   "dependencies": {
     "@apollo/client": "^3.2.2",

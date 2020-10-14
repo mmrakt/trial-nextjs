@@ -1,0 +1,23 @@
+mutation PostTask(
+  $target: Boolean!
+  $reportId: Int!
+  $hourId: Int!
+  $categoryId: Int!
+  $project: String!
+  $ticketTitle: String
+  $note: String
+) {
+  insert_tasks_one(
+    object: {
+      target: $target
+      reportId: $reportId
+      hourId: $hourId
+      categoryId: $categoryId
+      project: $project
+      ticketTitle: $ticketTitle
+      note: $note
+    }
+  ) {
+    id
+  }
+}
