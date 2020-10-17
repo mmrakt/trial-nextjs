@@ -22,9 +22,6 @@ const useStyles = makeStyles((theme) => ({
   title: {
     flexGrow: 1,
   },
-  appBar: {
-    color: Colors.common.white,
-  },
   titleButton: {
     textTransform: 'none',
   },
@@ -56,7 +53,7 @@ const HeaderComponent = (): any => {
 
   return (
     <>
-      <AppBar className={classes.appBar} position="fixed">
+      <AppBar position="fixed" color="default">
         <Toolbar>
           <IconButton
             edge="start"
@@ -68,16 +65,16 @@ const HeaderComponent = (): any => {
           </IconButton>
           <Drawer isOpenDrawer={isOpenDrawer} handleClose={handleDrawer} />
           <Button color="inherit" className={classes.titleButton}>
-            Next.js App
+            日報つーる
           </Button>
-          <AvatarButton
+          {/* <AvatarButton
             aria-controls="simple-menu"
             aria-haspopup="true"
             onClick={handleClick}
             className={classes.avatarButton}
           >
             <Avatar></Avatar>
-          </AvatarButton>
+          </AvatarButton> */}
 
           <Menu
             id="simple-menu"

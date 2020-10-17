@@ -22,7 +22,8 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     toolbar: theme.mixins.toolbar,
     pageTitle: {
-      marginBottom: theme.spacing(1),
+      marginBottom: theme.spacing(3),
+      textAlign: 'center',
     },
   })
 )

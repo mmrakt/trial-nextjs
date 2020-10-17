@@ -40,11 +40,12 @@
   array_relationships:
   - name: tasks
     using:
-      foreign_key_constraint_on:
-        column: reportId
-        table:
+      manual_configuration:
+        remote_table:
           schema: public
           name: tasks
+        column_mapping:
+          dateText: reportDateText
 - table:
     schema: public
     name: tasks
@@ -57,7 +58,7 @@
       foreign_key_constraint_on: hourId
   - name: report
     using:
-      foreign_key_constraint_on: reportId
+      foreign_key_constraint_on: reportDateText
 - table:
     schema: public
     name: users

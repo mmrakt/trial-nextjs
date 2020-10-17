@@ -1,11 +1,6 @@
 import React, { useState } from 'react'
-import PropTypes from 'prop-types'
-import clsx from 'clsx'
 import { v4 as uuidv4 } from 'uuid'
-import { makeStyles, Theme } from '@material-ui/core/styles'
-import DeleteIcon from '@material-ui/icons/Delete'
-import FilterListIcon from '@material-ui/icons/FilterList'
-import { LeakRemoveTwoTone } from '@material-ui/icons'
+import { makeStyles } from '@material-ui/core/styles'
 import {
   TableRow,
   TableHead,
@@ -16,41 +11,55 @@ import {
   Paper,
   Button,
 } from '@material-ui/core'
-import Layout from '../components/Layout'
-import TaskItem from '../components/Submit/TaskItem'
+import Layout from '../../components/Layout'
+import TaskItem from '../../components/Submit/TaskItem'
 import { usePostTaskMutation } from '@/generated/graphql'
-import { usePostReportMutation } from '@/generated/graphql'
+import {
+  usePostReportMutation,
+  useGetReportDataQuery,
+} from '@/generated/graphql'
+import { useRouter } from 'next/router'
 
 const useStyles = makeStyles((theme) => ({
   table: {
     minWidth: 650,
   },
+  tableHead: {},
   buttons: {
     display: 'flex',
   },
   button: {
     marginTop: theme.spacing(3),
+    marginBottom: theme.spacing(3),
     marginLeft: theme.spacing(1),
+    marginRight: theme.spacing(3),
     justifyContent: 'flex-end',
   },
 }))
 
-const Submit = () => {
+const Submit = (): React.ReactElement => {
   const classes = useStyles()
+  const router = useRouter()
+  const reportDate = router.query
   const [postTask] = usePostTaskMutation()
   const [postReport] = usePostReportMutation()
-  const [tasks, setTasks] = useState([
-    {
-      id: uuidv4(),
-      target: false,
-      hours: 1,
-      category: 1,
-      project: '',
-      ticketTitle: '',
-      note: '',
+  const [tasks, setTasks] = useState([])
+
+  const { data } = useGetReportDataQuery({
+    variables: {
+      dateText: reportDate.date as string,
     },
-  ])
-  const handleAdd = () => {
+  })
+  React.useEffect(() => {
+    if (data) {
+      if (data.reports.length) {
+        const registerdTasks = [...data.reports[0].tasks]
+        setTasks(registerdTasks)
+      }
+    }
+  }, [data])
+
+  const handleAddTask = () => {
     setTasks([
       ...tasks,
       {
@@ -64,7 +73,8 @@ const Submit = () => {
       },
     ])
   }
-  const handleDelete = (id) => {
+
+  const handleDeleteAllTask = (id) => {
     const newTasks = tasks.filter((row) => row.id !== id)
     setTasks(newTasks)
   }
@@ -87,6 +97,7 @@ const Submit = () => {
         return task
       }
     })
+    setTasks(newTasks)
   }
   const handleChangeHours = (id, hours) => {
     const newTasks = tasks.map((task) => {
@@ -184,7 +195,7 @@ const Submit = () => {
 
       await postReport({
         variables: {
-          date: 20201015,
+          dateText: reportDate as any,
           createdAt: 'now()',
           updatedAt: null,
         },
@@ -193,7 +204,7 @@ const Submit = () => {
         const { data } = await postTask({
           variables: {
             target: task.target,
-            reportId: 1,
+            reportDateText: reportDate as any,
             hourId: task.hours,
             categoryId: task.category,
             project: task.project,
@@ -201,22 +212,29 @@ const Submit = () => {
             note: task.note,
           },
         })
+        if (data) {
+          console.log('post unknown state', data)
+        }
       })
     },
     [tasks, postReport, postTask]
   )
 
   return (
-    <Layout title="Submit Report">
-      <Button variant="contained" onClick={handleAdd}>
-        add task
+    <Layout title="提出フォーム">
+      <Button
+        variant="contained"
+        onClick={handleAddTask}
+        className={classes.button}
+      >
+        作業を追加
       </Button>
       <TableContainer component={Paper}>
         <Table className={classes.table} aria-label="simple table">
-          <TableHead>
+          <TableHead className={classes.tableHead}>
             <TableRow>
               <TableCell align="center">目標</TableCell>
-              <TableCell align="center">時間(H)</TableCell>
+              <TableCell align="center">時間(h)</TableCell>
               <TableCell align="center">カテゴリー</TableCell>
               <TableCell align="center">プロジェクト</TableCell>
               <TableCell align="center">作業概要</TableCell>
@@ -248,7 +266,7 @@ const Submit = () => {
                   handleChangeNote(task.id, note)
                 }}
                 onDelete={() => {
-                  handleDelete(task.id)
+                  handleDeleteAllTask(task.id)
                 }}
               />
             ))}
@@ -263,7 +281,7 @@ const Submit = () => {
           className={classes.button}
           onClick={handleReset}
         >
-          Reset All
+          一括削除
         </Button>
         <form onSubmit={handleSubmit}>
           <Button
@@ -273,7 +291,7 @@ const Submit = () => {
             className={classes.button}
             type="submit"
           >
-            Submit
+            提出する
           </Button>
         </form>
       </div>

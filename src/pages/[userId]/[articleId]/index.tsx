@@ -1,7 +1,6 @@
 import React from 'react'
 import { useRouter } from 'next/router'
 import { NextPage } from 'next'
-// 生成したクエリを叩くための react hook関数
 import { useGetArticleQuery, Users } from '@/generated/graphql'
 import Error from 'next/error'
 import styles from './index.module.css'
@@ -9,7 +8,6 @@ import Article from '@/components/article'
 import { formatDate } from '@/utils/date'
 import { SiteHeader } from '@/components/site-header'
 import { UserIcon } from '@/components/user-icon'
-import TwitterIcon from '@material-ui/icons/Twitter'
 
 type ArticleHeaderProps = {
   subject: string

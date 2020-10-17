@@ -1,0 +1,5 @@
+query getReportsDateText {
+  reports {
+    dateText
+  }
+}

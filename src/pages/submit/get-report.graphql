@@ -1,0 +1,13 @@
+query getReportData($dateText: String!) {
+  reports(where: { dateText: { _eq: $dateText } }) {
+    tasks(where: { reportDateText: { _eq: $dateText } }) {
+      target
+      reportDateText
+      hourId
+      categoryId
+      project
+      ticketTitle
+      note
+    }
+  }
+}

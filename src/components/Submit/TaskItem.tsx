@@ -1,34 +1,10 @@
-import React, { useState } from 'react'
-import PropTypes from 'prop-types'
-import clsx from 'clsx'
-import { v4 as uuidv4 } from 'uuid'
-import {
-  createStyles,
-  lighten,
-  makeStyles,
-  Theme,
-} from '@material-ui/core/styles'
+import React from 'react'
 import DeleteIcon from '@material-ui/icons/Delete'
-import FilterListIcon from '@material-ui/icons/FilterList'
-import { LeakRemoveTwoTone } from '@material-ui/icons'
 import {
   Checkbox,
   TextField,
-  FormControlLabel,
-  Tooltip,
-  IconButton,
-  Toolbar,
-  TableSortLabel,
   TableRow,
-  TablePagination,
-  TableHead,
-  TableContainer,
   TableCell,
-  TableBody,
-  Table,
-  Typography,
-  Paper,
-  Switch,
   Select,
   MenuItem,
 } from '@material-ui/core'
@@ -39,6 +15,7 @@ type Props = {
     target: boolean
     hours: number
     category: number
+    project: string
     ticketTitle: string
     note: string
   }
@@ -50,7 +27,7 @@ type Props = {
   onChangeTicketTitle: (ticketTitle: string) => void
   onChangeNote: (note: string) => void
 }
-const TaskItem = (props: Props) => {
+const TaskItem = (props: Props): React.ReactElement => {
   const {
     task,
     onDelete,
@@ -61,12 +38,6 @@ const TaskItem = (props: Props) => {
     onChangeTicketTitle,
     onChangeNote,
   } = props
-  // const [target, setTarget] = useState(false)
-  // const [hours, setHours] = useState(0.25)
-  // const [category, setcategory] = useState('')
-  // const [ticketTitle, setticketTitle] = useState(task.ticketTitle)
-  // const [note, setNote] = useState('')
-  const customColumnStyle = { width: 12, backgroundColor: 'yellow' }
 
   const handleChangeHours = (e) => {
     onChangeHours(e.target.value)
@@ -87,13 +58,15 @@ const TaskItem = (props: Props) => {
     <>
       <TableRow>
         <TableCell component="th" scope="row" align="center">
-          <Checkbox id="target" onChange={onCheck} />
+          {/* TODO: 選択フォームの初期値の設定 */}
+          <Checkbox id="target" onChange={onCheck} value={task.target} />
         </TableCell>
         <TableCell align="center">
           <Select
             labelId="demo-simple-select-label"
             id="hours"
             onChange={handleChangeHours}
+            fullWidth
           >
             <MenuItem value={1}>0.25h</MenuItem>
             <MenuItem value={2}>0.5h</MenuItem>
@@ -110,7 +83,7 @@ const TaskItem = (props: Props) => {
           </Select>
         </TableCell>
         <TableCell align="center">
-          <Select id="category" onChange={handleChangeCategory}>
+          <Select id="category" onChange={handleChangeCategory} fullWidth>
             <MenuItem value={1}>会議</MenuItem>
             <MenuItem value={2}>資料作成</MenuItem>
             <MenuItem value={3}>コーディング</MenuItem>
@@ -120,7 +93,12 @@ const TaskItem = (props: Props) => {
           </Select>
         </TableCell>
         <TableCell align="center">
-          <Select id="project" onChange={handleChangeProject}>
+          <Select
+            id="project"
+            onChange={handleChangeProject}
+            fullWidth
+            value={task.project}
+          >
             <MenuItem value={'MS新基盤'}>MS新基盤</MenuItem>
             <MenuItem value={'MSエンハンス'}>MSエンハンス</MenuItem>
             <MenuItem value={'新卒研修'}>新卒研修</MenuItem>
@@ -128,10 +106,21 @@ const TaskItem = (props: Props) => {
           </Select>
         </TableCell>
         <TableCell align="center">
-          <TextField id="ticketTitle" onChange={handleChangeTicketTitle} />
+          <TextField
+            id="ticketTitle"
+            onChange={handleChangeTicketTitle}
+            placeholder="バグの調査"
+            value={task.ticketTitle}
+            fullWidth
+          />
         </TableCell>
         <TableCell align="center">
-          <TextField id="note" onChange={handleChangeNote} />
+          <TextField
+            id="note"
+            onChange={handleChangeNote}
+            value={task.note}
+            fullWidth
+          />
         </TableCell>
         <TableCell align="center">
           <DeleteIcon onClick={onDelete} />

@@ -19,6 +19,7 @@ import SettingsIcon from '@material-ui/icons/Settings'
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft'
 import ChevronRightIcon from '@material-ui/icons/ChevronRight'
 import Link from 'next/link'
+import { useRouter } from 'next/router'
 
 type IProps = {
   isOpenDrawer: boolean
@@ -48,24 +49,15 @@ const Drawer = (props: IProps): React.ReactElement => {
   const { isOpenDrawer, handleClose } = props
   const theme = useTheme()
   const classes = useStyles()
-  const DrawerListItem = [
-    {
-      text: 'ダッシュボード',
-      link: '/',
-    },
-    {
-      text: '日報の提出',
-      link: '/submit',
-    },
-    {
-      text: '日報の提出状況確認',
-      link: '/check',
-    },
-    {
-      text: '設定',
-      link: '/settings',
-    },
-  ]
+  const router = useRouter()
+  const handleRouting = () => {
+    const date = new Date()
+    const y = date.getFullYear()
+    const m = ('00' + (date.getMonth() + 1)).slice(-2)
+    const d = ('00' + date.getDate()).slice(-2)
+    const formatDate = Number(y + m + d)
+    router.push(`/submit/${formatDate}`)
+  }
   return (
     <>
       <DrawerEl
@@ -76,7 +68,7 @@ const Drawer = (props: IProps): React.ReactElement => {
         }}
       >
         <div className={classes.drawerHeader}>
-          {/* 子コンポーネントにonClickハンドラを含めるとエラーになる */}
+          {/*TODO: 子コンポーネントにonClickハンドラを含めるとエラーになる */}
           <IconButton onClick={handleClose}>
             {theme.direction === 'ltr' ? (
               <ChevronLeftIcon />
@@ -87,21 +79,20 @@ const Drawer = (props: IProps): React.ReactElement => {
         </div>
         <Divider />
         <List>
-          {DrawerListItem.map((item, index) => (
-            <Link href={item.link} key={index}>
-              <ListItem button>
-                <ListItemAvatar>
-                  <>
-                    {item.link === '/' && <DashboardIcon />}
-                    {item.link === '/submit' && <NoteAddIcon />}
-                    {item.link === '/check' && <LibraryAddCheckIcon />}
-                    {item.link === '/settings' && <SettingsIcon />}
-                  </>
-                </ListItemAvatar>
-                <ListItemText>{item.text}</ListItemText>
-              </ListItem>
-            </Link>
-          ))}
+          <Link href="/check">
+            <ListItem button>
+              <ListItemAvatar>
+                <LibraryAddCheckIcon />
+              </ListItemAvatar>
+              <ListItemText>提出状況確認</ListItemText>
+            </ListItem>
+          </Link>
+          <ListItem button onClick={handleRouting}>
+            <ListItemAvatar>
+              <NoteAddIcon />
+            </ListItemAvatar>
+            <ListItemText>提出フォーム</ListItemText>
+          </ListItem>
         </List>
       </DrawerEl>
     </>

@@ -1,0 +1,16 @@
+.notSubmitted{
+    color: lightgrey;
+}
+
+.submitted{
+    color: lightblue;
+}
+
+.calendarBox{
+}
+
+.calendar{
+    margin: 0 auto;
+    width: 1000px;
+    font-size: 20px;
+}

@@ -1,0 +1,15 @@
+mutation PostReport(
+  $dateText: String
+  $createdAt: timestamp
+  $updatedAt: timestamp
+) {
+  insert_reports_one(
+    object: {
+      dateText: $dateText
+      createdAt: $createdAt
+      updatedAt: $updatedAt
+    }
+  ) {
+    dateText
+  }
+}

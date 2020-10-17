@@ -1,6 +1,6 @@
 mutation PostTask(
   $target: Boolean!
-  $reportId: Int!
+  $reportDateText: String!
   $hourId: Int!
   $categoryId: Int!
   $project: String!
@@ -10,7 +10,7 @@ mutation PostTask(
   insert_tasks_one(
     object: {
       target: $target
-      reportId: $reportId
+      reportDateText: $reportDateText
       hourId: $hourId
       categoryId: $categoryId
       project: $project

@@ -10,6 +10,7 @@ import { ApolloClient, InMemoryCache, HttpLink } from '@apollo/client'
 import { ApolloProvider } from '@apollo/react-hooks'
 import 'minireset.css'
 import '../base.css'
+import 'react-calendar/dist/Calendar.css'
 export default function MyApp(props): any {
   const { Component, pageProps } = props
 
@@ -34,7 +35,7 @@ export default function MyApp(props): any {
   return (
     <React.Fragment>
       <Head>
-        <title>My page</title>
+        <title>日報つーる</title>
         <meta
           name="viewport"
           content="minimum-scale=1, initial-scale=1, width=device-width"
