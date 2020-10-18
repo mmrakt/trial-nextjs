@@ -195,7 +195,7 @@ const Submit = (): React.ReactElement => {
 
       await postReport({
         variables: {
-          dateText: reportDate as any,
+          dateText: reportDate.date as string,
           createdAt: 'now()',
           updatedAt: null,
         },
@@ -204,7 +204,7 @@ const Submit = (): React.ReactElement => {
         const { data } = await postTask({
           variables: {
             target: task.target,
-            reportDateText: reportDate as any,
+            reportDateText: reportDate.date as string,
             hourId: task.hours,
             categoryId: task.category,
             project: task.project,

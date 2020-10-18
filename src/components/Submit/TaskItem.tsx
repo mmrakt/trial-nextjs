@@ -67,6 +67,7 @@ const TaskItem = (props: Props): React.ReactElement => {
             id="hours"
             onChange={handleChangeHours}
             fullWidth
+            value={task.hours}
           >
             <MenuItem value={1}>0.25h</MenuItem>
             <MenuItem value={2}>0.5h</MenuItem>
@@ -83,7 +84,12 @@ const TaskItem = (props: Props): React.ReactElement => {
           </Select>
         </TableCell>
         <TableCell align="center">
-          <Select id="category" onChange={handleChangeCategory} fullWidth>
+          <Select
+            id="category"
+            onChange={handleChangeCategory}
+            fullWidth
+            value={task.category}
+          >
             <MenuItem value={1}>会議</MenuItem>
             <MenuItem value={2}>資料作成</MenuItem>
             <MenuItem value={3}>コーディング</MenuItem>
