@@ -40,12 +40,11 @@
   array_relationships:
   - name: tasks
     using:
-      manual_configuration:
-        remote_table:
+      foreign_key_constraint_on:
+        column: reportDateText
+        table:
           schema: public
           name: tasks
-        column_mapping:
-          dateText: reportDateText
 - table:
     schema: public
     name: tasks
@@ -67,6 +66,8 @@
     custom_column_names:
       display_name: displayName
       display_id: displayId
+      updated_at: updatedAt
+      created_at: createdAt
   array_relationships:
   - name: articles
     using:

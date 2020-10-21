@@ -13,8 +13,8 @@ type Props = {
   task: {
     id: string
     target: boolean
-    hours: number
-    category: number
+    hourId: number
+    categoryId: number
     project: string
     ticketTitle: string
     note: string
@@ -67,7 +67,7 @@ const TaskItem = (props: Props): React.ReactElement => {
             id="hours"
             onChange={handleChangeHours}
             fullWidth
-            value={task.hours}
+            value={task.hourId}
           >
             <MenuItem value={1}>0.25h</MenuItem>
             <MenuItem value={2}>0.5h</MenuItem>
@@ -88,7 +88,7 @@ const TaskItem = (props: Props): React.ReactElement => {
             id="category"
             onChange={handleChangeCategory}
             fullWidth
-            value={task.category}
+            value={task.categoryId}
           >
             <MenuItem value={1}>会議</MenuItem>
             <MenuItem value={2}>資料作成</MenuItem>

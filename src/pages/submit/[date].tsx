@@ -19,6 +19,7 @@ import {
   useGetReportDataQuery,
 } from '@/generated/graphql'
 import { useRouter } from 'next/router'
+import { ToastContainer, toast } from 'react-toastify';
 
 const useStyles = makeStyles((theme) => ({
   table: {
@@ -65,7 +66,7 @@ const Submit = (): React.ReactElement => {
       {
         id: uuidv4(),
         target: false,
-        hours: 1,
+        hourId: 1,
         category: 1,
         project: '',
         ticketTitle: '',
@@ -87,7 +88,7 @@ const Submit = (): React.ReactElement => {
         return {
           id: task.id,
           target: !task.target,
-          hours: task.hours,
+          hourId: task.hourId,
           category: task.category,
           project: task.project,
           ticketTitle: task.ticketTitle,
@@ -99,13 +100,13 @@ const Submit = (): React.ReactElement => {
     })
     setTasks(newTasks)
   }
-  const handleChangeHours = (id, hours) => {
+  const handleChangeHours = (id, hourId) => {
     const newTasks = tasks.map((task) => {
       if (task.id === id) {
         return {
           id: task.id,
           target: task.target,
-          hours: hours,
+          hourId: hourId,
           category: task.category,
           project: task.project,
           ticketTitle: task.ticketTitle,
@@ -123,7 +124,7 @@ const Submit = (): React.ReactElement => {
         return {
           id: task.id,
           target: task.target,
-          hours: task.hours,
+          hourId: task.hourId,
           category: category,
           project: task.project,
           ticketTitle: task.ticketTitle,
@@ -141,7 +142,7 @@ const Submit = (): React.ReactElement => {
         return {
           id: task.id,
           target: task.target,
-          hours: task.hours,
+          hourId: task.hourId,
           category: task.category,
           project: project,
           ticketTitle: task.ticketTitle,
@@ -159,7 +160,7 @@ const Submit = (): React.ReactElement => {
         return {
           id: task.id,
           target: task.target,
-          hours: task.hours,
+          hourId: task.hourId,
           category: task.category,
           project: task.project,
           ticketTitle: ticketTitle,
@@ -177,7 +178,7 @@ const Submit = (): React.ReactElement => {
         return {
           id: task.id,
           target: task.target,
-          hours: task.hours,
+          hourId: task.hourId,
           category: task.category,
           project: task.project,
           ticketTitle: task.ticketTitle,
@@ -205,7 +206,7 @@ const Submit = (): React.ReactElement => {
           variables: {
             target: task.target,
             reportDateText: reportDate.date as string,
-            hourId: task.hours,
+            hourId: task.hourId,
             categoryId: task.category,
             project: task.project,
             ticketTitle: task.ticketTitle,
@@ -216,12 +217,21 @@ const Submit = (): React.ReactElement => {
           console.log('post unknown state', data)
         }
       })
+      toast.success('提出完了しました。お疲れ様でした。', {
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      })
     },
     [tasks, postReport, postTask]
   )
 
   return (
     <Layout title="提出フォーム">
+      <ToastContainer />
       <Button
         variant="contained"
         onClick={handleAddTask}
@@ -250,8 +260,8 @@ const Submit = (): React.ReactElement => {
                 onCheck={() => {
                   handleCheck(task.id)
                 }}
-                onChangeHours={(hours) => {
-                  handleChangeHours(task.id, hours)
+                onChangeHours={(hourId) => {
+                  handleChangeHours(task.id, hourId)
                 }}
                 onChangeCategory={(category) => {
                   handleChangeCategory(task.id, category)
