@@ -9,6 +9,10 @@ mutation PostReport(
       createdAt: $createdAt
       updatedAt: $updatedAt
     }
+    on_conflict: {
+      constraint: reports_id_key
+      update_columns: [dateText, updatedAt]
+    }
   ) {
     dateText
   }

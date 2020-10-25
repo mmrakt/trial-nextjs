@@ -12,10 +12,9 @@ import {
   makeStyles,
   createStyles,
 } from '@material-ui/core'
-import DashboardIcon from '@material-ui/icons/Dashboard'
 import NoteAddIcon from '@material-ui/icons/NoteAdd'
 import LibraryAddCheckIcon from '@material-ui/icons/LibraryAddCheck'
-import SettingsIcon from '@material-ui/icons/Settings'
+import EqualizerIcon from '@material-ui/icons/Equalizer'
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft'
 import ChevronRightIcon from '@material-ui/icons/ChevronRight'
 import Link from 'next/link'
@@ -93,6 +92,14 @@ const Drawer = (props: IProps): React.ReactElement => {
             </ListItemAvatar>
             <ListItemText>提出フォーム</ListItemText>
           </ListItem>
+          <Link href="/aggregate">
+            <ListItem button>
+              <ListItemAvatar>
+                <EqualizerIcon />
+              </ListItemAvatar>
+              <ListItemText>集計データ確認</ListItemText>
+            </ListItem>
+          </Link>
         </List>
       </DrawerEl>
     </>

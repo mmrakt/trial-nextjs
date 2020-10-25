@@ -1,0 +1,15 @@
+query getAllTasks {
+  tasks {
+    target
+    reportDateText
+    hour {
+      hour
+    }
+    category {
+      category
+    }
+    project
+    ticketTitle
+    note
+  }
+}

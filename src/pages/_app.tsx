@@ -11,7 +11,7 @@ import { ApolloProvider } from '@apollo/react-hooks'
 import 'minireset.css'
 import '../base.css'
 import 'react-calendar/dist/Calendar.css'
-import 'react-toastify/dist/ReactToastify.css';
+import 'react-toastify/dist/ReactToastify.css'
 export default function MyApp(props): any {
   const { Component, pageProps } = props
 

@@ -17,6 +17,10 @@ mutation PostTask(
       ticketTitle: $ticketTitle
       note: $note
     }
+    on_conflict: {
+      constraint: tasks_pkey
+      update_columns: [target, hourId, categoryId, project, ticketTitle, note]
+    }
   ) {
     id
   }
