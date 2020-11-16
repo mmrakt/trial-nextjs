@@ -1,4 +1,4 @@
-query getReportData($dateText: String!) {
+query getReport($dateText: String!) {
   reports(where: { dateText: { _eq: $dateText } }) {
     tasks(where: { reportDateText: { _eq: $dateText } }) {
       target
@@ -9,5 +9,13 @@ query getReportData($dateText: String!) {
       ticketTitle
       note
     }
+  }
+  hours {
+    id
+    hour
+  }
+  categories {
+    id
+    category
   }
 }

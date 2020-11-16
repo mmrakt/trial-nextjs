@@ -10,7 +10,8 @@ services:
   graphql-engine:
     image: hasura/graphql-engine:v1.3.2
     ports:
-      - '8080:8080'
+      ## リポジトリ名の変更時に8080ポートで failed: port is already allocated のエラーが出たため8081に変更
+      - '8081:8080'
     depends_on:
       - 'postgres'
     restart: always

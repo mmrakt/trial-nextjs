@@ -2,8 +2,7 @@ import { combineReducers } from '@reduxjs/toolkit'
 import todoModule from './modules/todoModule'
 
 const rootReducer = combineReducers({
-  // moduleのnameプロパティを指定
-  todos: todoModule.reducer,
+    todos: todoModule.reducer,
 })
 
 export type rootState = ReturnType<typeof rootReducer>
