@@ -7,6 +7,13 @@ import { useGetReportsDateTextQuery } from '@/generated/graphql'
 import DoneIcon from '@material-ui/icons/Done'
 import RemoveIcon from '@material-ui/icons/Remove'
 import { formatDate } from '@/utils/date'
+import styled from 'styled-components'
+
+const StyledCalendar = styled(Calendar)`
+    margin: 0 auto;
+    width: 1000px;
+    font-size: 20px;
+`
 
 const Check = (): React.ReactElement => {
     const { loading, error, data } = useGetReportsDateTextQuery()
@@ -36,9 +43,8 @@ const Check = (): React.ReactElement => {
     }
     return (
         <Layout title="提出状況確認">
-            <div className={styles.calendarBox}>
-                <Calendar
-                    className={styles.calendar}
+            <div className="calendarBox">
+                <StyledCalendar
                     value={new Date()}
                     tileContent={getTileContent}
                     calendarType="US"

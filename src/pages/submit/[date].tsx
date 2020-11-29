@@ -1,6 +1,5 @@
 import React, { useState } from 'react'
 import { v4 as uuidv4 } from 'uuid'
-import { makeStyles } from '@material-ui/core/styles'
 import {
     TableRow,
     TableHead,
@@ -9,7 +8,7 @@ import {
     TableBody,
     Table,
     Paper,
-    Button,
+    Button
 } from '@material-ui/core'
 import Layout from '../../components/Layout'
 import TaskItem from './TaskItem'
@@ -20,26 +19,19 @@ import {
 } from '../../generated/graphql'
 import { useRouter } from 'next/router'
 import { ToastContainer, toast } from 'react-toastify'
+import styled from 'styled-components'
 
-const useStyles = makeStyles((theme) => ({
-    table: {
-        minWidth: 650,
-    },
-    tableHead: {},
-    buttons: {
-        display: 'flex',
-    },
-    button: {
-        marginTop: theme.spacing(3),
-        marginBottom: theme.spacing(3),
-        marginLeft: theme.spacing(1),
-        marginRight: theme.spacing(3),
-        justifyContent: 'flex-end',
-    },
-}))
+const StyledTable = styled(Table)`
+    minWidth: 650;
+`
+const StyledButtons = styled.div`
+    display: flex;
+`
+const StyledButton = styled(Button)`
+    justify-content: flex-end;
+`
 
 const Submit = (): React.ReactElement => {
-    const classes = useStyles()
     const router = useRouter()
     const reportDate = router.query
     const [postTask] = usePostTaskMutation()
@@ -73,7 +65,6 @@ const Submit = (): React.ReactElement => {
             setHourList(data.hours)
             setCategoryList(data.categories)
         }
-        // TODO: 配列にdataを指定しないとタスクの表示が空になる原因の特定
     }, [data])
 
     const handleAddTask = () => {
@@ -174,17 +165,16 @@ const Submit = (): React.ReactElement => {
     return (
         <Layout title="提出フォーム">
             <ToastContainer />
-            <Button
+            <StyledButton
                 variant="contained"
                 onClick={handleAddTask}
-                className={classes.button}
                 data-testid="add-button"
             >
                 作業を追加
-            </Button>
+            </StyledButton>
             <TableContainer component={Paper}>
-                <Table className={classes.table} aria-label="simple table">
-                    <TableHead className={classes.tableHead}>
+                <StyledTable aria-label="simple table">
+                    <TableHead>
                         <TableRow>
                             <TableCell align="center">目標</TableCell>
                             <TableCell align="center">時間(h)</TableCell>
@@ -211,30 +201,28 @@ const Submit = (): React.ReactElement => {
                             />
                         ))}
                     </TableBody>
-                </Table>
+                </StyledTable>
             </TableContainer>
-            <div className={classes.buttons}>
-                <Button
+            <StyledButtons>
+                <StyledButton
                     variant="contained"
                     color="secondary"
                     disableElevation
-                    className={classes.button}
                     onClick={handleDeleteAllTasks}
                 >
                     一括削除
-                </Button>
+                </StyledButton>
                 <form onSubmit={handleSubmitTasks}>
-                    <Button
+                    <StyledButton
                         variant="contained"
                         color="primary"
                         disableElevation
-                        className={classes.button}
                         type="submit"
                     >
                         提出する
-                    </Button>
+                    </StyledButton>
                 </form>
-            </div>
+            </StyledButtons>
         </Layout>
     )
 }
