@@ -12,7 +12,7 @@ query getReport($dateText: String!) {
   }
   hours {
     id
-    hour
+    hours
   }
   categories {
     id

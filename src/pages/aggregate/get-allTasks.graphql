@@ -3,7 +3,7 @@ query getAllTasks {
     target
     reportDateText
     hour {
-      hour
+      hours
     }
     category {
       category
