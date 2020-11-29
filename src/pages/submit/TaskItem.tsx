@@ -8,7 +8,7 @@ import {
     Select,
     MenuItem,
 } from '@material-ui/core'
-import { Const } from '@/utils/const'
+import { Const } from '../../utils/const'
 
 type Props = {
     task: {
@@ -33,92 +33,88 @@ const TaskItem = (props: Props): React.ReactElement => {
         onChange(label, e.target.value)
     }
     return (
-        <>
-            <TableRow>
-                <TableCell component="th" scope="row" align="center">
-                    {/* TODO:  下記エラーの解消
-          A component is changing an uncontrolled input of type undefined to be controlled */}
-                    <Checkbox
-                        id="target"
-                        onChange={(e) => {
-                            handleChange(e, 'target')
-                        }}
-                        value={task.target}
-                    />
-                </TableCell>
-                <TableCell align="center">
-                    <Select
-                        id="hourId"
-                        onChange={(e) => {
-                            handleChange(e, 'hourId')
-                        }}
-                        fullWidth
-                        value={task.hourId}
-                    >
-                        {hourList.map((hour, index) => (
-                            <MenuItem value={index} key={index}>
-                                {hour.hour}h
-                            </MenuItem>
-                        ))}
-                    </Select>
-                </TableCell>
-                <TableCell align="center">
-                    <Select
-                        id="categoryId"
-                        onChange={(e) => {
-                            handleChange(e, 'categoryId')
-                        }}
-                        fullWidth
-                        value={task.categoryId}
-                    >
-                        {categoryList.map((category, index) => (
-                            <MenuItem value={index} key={index}>
-                                {category.category}
-                            </MenuItem>
-                        ))}
-                    </Select>
-                </TableCell>
-                <TableCell align="center">
-                    <Select
-                        id="project"
-                        onChange={(e) => {
-                            handleChange(e, 'project')
-                        }}
-                        fullWidth
-                        value={task.project}
-                    >
-                        {Const.PROJECT_LIST.map((project, index) => (
-                            <MenuItem value={project} key={index}>
-                                {project}
-                            </MenuItem>
-                        ))}
-                    </Select>
-                </TableCell>
-                <TableCell align="center">
-                    <TextField
-                        id="ticketTitle"
-                        onChange={(e) => {
-                            handleChange(e, 'ticketTitle')
-                        }}
-                        value={task.ticketTitle || ''}
-                        fullWidth
-                    />
-                </TableCell>
-                <TableCell align="center">
-                    <TextField
-                        id="note"
-                        onChange={(e) => {
-                            handleChange(e, 'note')
-                        }}
-                        value={task.note || ''}
-                        fullWidth
-                    />
-                </TableCell>
-                <TableCell align="center">
-                    <DeleteIcon onClick={onDelete} />
-                </TableCell>
-            </TableRow>
-        </>
+        <TableRow>
+            <TableCell component="th" scope="row" align="center">
+                <Checkbox
+                    id="target"
+                    onChange={(e) => {
+                        handleChange(e, 'target')
+                    }}
+                    value={task.target}
+                />
+            </TableCell>
+            <TableCell align="center">
+                <Select
+                    id="hourId"
+                    onChange={(e) => {
+                        handleChange(e, 'hourId')
+                    }}
+                    fullWidth
+                    value={task.hourId}
+                >
+                    {hourList.map((hour, index) => (
+                        <MenuItem value={index} key={index}>
+                            {hour.hour}h
+                        </MenuItem>
+                    ))}
+                </Select>
+            </TableCell>
+            <TableCell align="center">
+                <Select
+                    id="categoryId"
+                    onChange={(e) => {
+                        handleChange(e, 'categoryId')
+                    }}
+                    fullWidth
+                    value={task.categoryId}
+                >
+                    {categoryList.map((category, index) => (
+                        <MenuItem value={index} key={index}>
+                            {category.category}
+                        </MenuItem>
+                    ))}
+                </Select>
+            </TableCell>
+            <TableCell align="center">
+                <Select
+                    id="project"
+                    onChange={(e) => {
+                        handleChange(e, 'project')
+                    }}
+                    fullWidth
+                    value={task.project}
+                >
+                    {Const.PROJECT_LIST.map((project, index) => (
+                        <MenuItem value={project} key={index}>
+                            {project}
+                        </MenuItem>
+                    ))}
+                </Select>
+            </TableCell>
+            <TableCell align="center">
+                <TextField
+                    id="ticketTitle"
+                    onChange={(e) => {
+                        handleChange(e, 'ticketTitle')
+                    }}
+                    value={task.ticketTitle || ''}
+                    fullWidth
+                />
+            </TableCell>
+            <TableCell align="center">
+                <TextField
+                    id="note"
+                    onChange={(e) => {
+                        handleChange(e, 'note')
+                    }}
+                    value={task.note || ''}
+                    fullWidth
+                />
+            </TableCell>
+            <TableCell align="center">
+                <DeleteIcon onClick={onDelete} />
+            </TableCell>
+        </TableRow>
     )
 }
 export default TaskItem
