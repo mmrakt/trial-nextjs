@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from 'react'
 import firebase from 'firebase'
-import { db } from '../../../functions/firebase'
+import { fbDb, fbAuth } from '../../../functions/firebase'
 import StyledFirebaseAuth from 'react-firebaseui/StyledFirebaseAuth'
 import Layout from '../../components/Layout'
 import { Container } from '@material-ui/core'
 
-function Signin() {
+const Signin = () => {
     const [loading, setLoading] = useState(true)
     const [users, setUsers] = useState<firebase.firestore.DocumentData[]>([])
-    const [myAccount, setMyAccount] = useState<firebase.User>()
+    const [currentUser, setCurrentUser] = useState<firebase.User>()
 
     const uiConfig = {
         signInFlow: 'popup',
@@ -20,13 +20,10 @@ function Signin() {
     }
 
     useEffect(() => {
-        //usersコレクションを返却
         const searchUsers = async () => {
-            // Firestoreのコレクションを指定してデータ取得
-            const res = await db.collection('users').get()
+            const res = await fbDb.collection('users').get()
             if (res.empty) return []
             const userList = []
-            // DocumentData型にはmapメソッドが定義されていないため、forEachのループでデータを加工
             res.forEach((doc) => {
                 userList.push(doc.data())
             })
@@ -37,18 +34,18 @@ function Signin() {
             setLoading(false)
             if (!user) return
             if (user.email) return
-            setMyAccount(user)
+            setCurrentUser(user)
             searchUsers()
         })
     }, [])
 
     return (
-        <Layout title="サインイン">
+        <Layout title="Signin">
             <Container>
                 <header>
                     {loading ? (
                         <p>LOADING.....</p>
-                    ) : !myAccount ? (
+                    ) : !currentUser ? (
                         <p>
                             <StyledFirebaseAuth
                                 uiConfig={uiConfig}

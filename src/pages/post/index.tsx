@@ -13,7 +13,6 @@ const PostPage = (): React.ReactElement => {
     const [postArticle] = usePostArticleMutation()
     const [postDisabled, setPostDisabled] = React.useState(false)
     const router = useRouter()
-
     const handleChangeSubject = React.useCallback(
         (ev: React.ChangeEvent<HTMLInputElement>) => {
             setSubject(ev.target.value)

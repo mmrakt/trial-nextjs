@@ -5,15 +5,13 @@ import {
     Button,
     CssBaseline,
     TextField,
-    FormControlLabel,
-    Checkbox,
     Link,
     Grid,
     makeStyles,
     Container,
-    Typography,
 } from '@material-ui/core'
-// import { LockOutlinedIcon } from '@material-ui/icons'
+import { fbAuth, fbDb } from '../../../functions/firebase'
+import { useRouter } from 'next/router'
 
 const useStyles = makeStyles((theme) => ({
     paper: {
@@ -27,7 +25,7 @@ const useStyles = makeStyles((theme) => ({
         backgroundColor: theme.palette.secondary.main,
     },
     form: {
-        width: '100%', // Fix IE 11 issue.
+        width: '100%',
         marginTop: theme.spacing(3),
     },
     submit: {
@@ -35,46 +33,71 @@ const useStyles = makeStyles((theme) => ({
     },
 }))
 
-export default function SignUp() {
+const Signup = (): React.ReactElement => {
     const classes = useStyles()
-    const [firstName, setFirstName] = useState('')
-    const [lastName, setLastName] = useState('')
+    const [userId, setUserId] = useState('')
+    const [displayName, setDisplayName] = useState('')
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
+    const [confirmPassword, setConfirmPassword] = useState('')
+    const router = useRouter()
+
+    const handleChangeUserId = (e) => setUserId(e.target.value)
+    const handleChangeDisplayName = (e) => setDisplayName(e.target.value)
+    const handleChangeEmail = (e) => setEmail(e.target.value)
+    const handleChangePassword = (e) => setPassword(e.target.value)
+    const handleChangeConfirmPassword = (e) =>
+        setConfirmPassword(e.target.value)
+
+    const signup = async (): Promise<void> => {
+        if (email && password) {
+            await fbAuth
+                .createUserWithEmailAndPassword(email, password)
+                .then((result) => {
+                    result.user.updateProfile({
+                        displayName: displayName,
+                    })
+                })
+            fbDb.collection('users').doc(fbAuth.currentUser.uid).set({
+                fbUid: fbAuth.currentUser.uid,
+                userId: userId,
+                displayName: displayName,
+                email: email,
+            })
+            router.push(`/{$fbAuth.currentUser.uid}`)
+        }
+    }
 
     return (
-        <Layout title="会員登録">
+        <Layout title="Signup">
             <Container component="main" maxWidth="xs">
                 <CssBaseline />
                 <div className={classes.paper}>
                     <Avatar className={classes.avatar}></Avatar>
-                    <Typography component="h1" variant="h5">
-                        Sign up
-                    </Typography>
                     <form className={classes.form} noValidate>
                         <Grid container spacing={2}>
-                            <Grid item xs={12} sm={6}>
+                            <Grid item xs={12}>
                                 <TextField
-                                    autoComplete="fname"
-                                    name="firstName"
                                     variant="outlined"
                                     required
                                     fullWidth
-                                    id="firstName"
-                                    label="First Name"
-                                    autoFocus
-                                    onChange={() => setFirstName}
+                                    id="userId"
+                                    label="User ID"
+                                    name="userId"
+                                    autoComplete="userId"
+                                    onChange={handleChangeUserId}
                                 />
                             </Grid>
-                            <Grid item xs={12} sm={6}>
+                            <Grid item xs={12}>
                                 <TextField
                                     variant="outlined"
                                     required
                                     fullWidth
-                                    id="lastName"
-                                    label="Last Name"
-                                    name="lastName"
-                                    autoComplete="lname"
+                                    id="displayName"
+                                    label="Display Name"
+                                    name="diplayName"
+                                    autoComplete="displayName"
+                                    onChange={handleChangeDisplayName}
                                 />
                             </Grid>
                             <Grid item xs={12}>
@@ -86,6 +109,7 @@ export default function SignUp() {
                                     label="Email Address"
                                     name="email"
                                     autoComplete="email"
+                                    onChange={handleChangeEmail}
                                 />
                             </Grid>
                             <Grid item xs={12}>
@@ -98,6 +122,7 @@ export default function SignUp() {
                                     type="password"
                                     id="password"
                                     autoComplete="current-password"
+                                    onChange={handleChangePassword}
                                 />
                             </Grid>
                             <Grid item xs={12}>
@@ -110,26 +135,16 @@ export default function SignUp() {
                                     type="password"
                                     id="password"
                                     autoComplete="current-password"
-                                />
-                            </Grid>
-                            <Grid item xs={12}>
-                                <FormControlLabel
-                                    control={
-                                        <Checkbox
-                                            value="allowExtraEmails"
-                                            color="primary"
-                                        />
-                                    }
-                                    label="I want to receive inspiration, marketing promotions and updates via email."
+                                    onChange={handleChangeConfirmPassword}
                                 />
                             </Grid>
                         </Grid>
                         <Button
-                            type="submit"
                             fullWidth
                             variant="contained"
                             color="primary"
                             className={classes.submit}
+                            onClick={signup}
                         >
                             Sign Up
                         </Button>
@@ -146,3 +161,5 @@ export default function SignUp() {
         </Layout>
     )
 }
+
+export default Signup

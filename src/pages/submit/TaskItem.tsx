@@ -112,7 +112,7 @@ const TaskItem = (props: Props): React.ReactElement => {
                 />
             </TableCell>
             <TableCell align="center">
-                <DeleteIcon onClick={onDelete} />
+                <DeleteIcon onClick={onDelete} data-testid="delete-icon" />
             </TableCell>
         </TableRow>
     )

@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import Link from 'next/link'
 import { makeStyles } from '@material-ui/core/styles'
 import MenuIcon from '@material-ui/icons/Menu'
@@ -6,13 +6,13 @@ import {
     Avatar,
     Menu,
     MenuItem,
-    IconButton,
     Toolbar,
     Button,
     AppBar,
 } from '@material-ui/core'
 import styled from 'styled-components'
 import Drawer from './drawer'
+import { AuthContext } from '../pages/_app'
 
 const useStyles = makeStyles((theme) => ({
     menuButton: {
@@ -32,8 +32,10 @@ const useStyles = makeStyles((theme) => ({
 const AvatarButton = styled(Button)`
     float: right;
 `
+
 const Header = (): React.ReactElement => {
     const classes = useStyles()
+    const { currentUser } = useContext(AuthContext)
     const [isOpenMenu, setIsOpenMenu] = React.useState(null)
     const [isOpenDrawer, setIsOpenDrawer] = React.useState(false)
     const handleClick = (e) => {
@@ -54,14 +56,7 @@ const Header = (): React.ReactElement => {
         <>
             <AppBar position="fixed" color="default">
                 <Toolbar>
-                    <IconButton
-                        edge="start"
-                        className={classes.menuButton}
-                        color="inherit"
-                        aria-label="menu"
-                    >
-                        <MenuIcon onClick={handleDrawer} />
-                    </IconButton>
+                    <MenuIcon onClick={handleDrawer} />
                     <Drawer
                         isOpenDrawer={isOpenDrawer}
                         handleClose={handleDrawer}
@@ -85,16 +80,33 @@ const Header = (): React.ReactElement => {
                         open={Boolean(isOpenMenu)}
                         onClose={handleClose}
                     >
-                        <MenuItem onClick={handleClose}>
-                            <Link href="/signin">
-                                <a>signin</a>
-                            </Link>
-                        </MenuItem>
-                        <MenuItem onClick={handleClose}>
-                            <Link href="/signup">
-                                <a>signup</a>
-                            </Link>
-                        </MenuItem>
+                        {currentUser ? (
+                            <>
+                                <MenuItem onClick={handleClose}>
+                                    <Link href={`/${currentUser.userId}`}>
+                                        <a>マイページ</a>
+                                    </Link>
+                                </MenuItem>
+                                <MenuItem onClick={handleClose}>
+                                    <Link href="/signup">
+                                        <a>サインアウト</a>
+                                    </Link>
+                                </MenuItem>
+                            </>
+                        ) : (
+                            <>
+                                <MenuItem onClick={handleClose}>
+                                    <Link href="/signin">
+                                        <a>サインイン</a>
+                                    </Link>
+                                </MenuItem>
+                                <MenuItem onClick={handleClose}>
+                                    <Link href="/signup">
+                                        <a>サインアップ</a>
+                                    </Link>
+                                </MenuItem>
+                            </>
+                        )}
                     </Menu>
                 </Toolbar>
             </AppBar>

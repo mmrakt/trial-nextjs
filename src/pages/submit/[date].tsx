@@ -8,7 +8,7 @@ import {
     TableBody,
     Table,
     Paper,
-    Button
+    Button,
 } from '@material-ui/core'
 import Layout from '../../components/Layout'
 import TaskItem from './TaskItem'
@@ -22,7 +22,7 @@ import { ToastContainer, toast } from 'react-toastify'
 import styled from 'styled-components'
 
 const StyledTable = styled(Table)`
-    minWidth: 650;
+    minwidth: 650;
 `
 const StyledButtons = styled.div`
     display: flex;
@@ -209,6 +209,7 @@ const Submit = (): React.ReactElement => {
                     color="secondary"
                     disableElevation
                     onClick={handleDeleteAllTasks}
+                    data-testid="delete-button"
                 >
                     一括削除
                 </StyledButton>

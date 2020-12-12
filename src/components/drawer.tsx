@@ -21,7 +21,7 @@ import ChevronLeftIcon from '@material-ui/icons/ChevronLeft'
 import ChevronRightIcon from '@material-ui/icons/ChevronRight'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
-import { formatDate } from '@/utils/date'
+import { formatDate } from '../utils/date'
 
 type IProps = {
     isOpenDrawer: boolean
