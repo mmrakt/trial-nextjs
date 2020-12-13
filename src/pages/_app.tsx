@@ -11,17 +11,14 @@ import 'minireset.css'
 import '../base.css'
 import 'react-calendar/dist/Calendar.css'
 import 'react-toastify/dist/ReactToastify.css'
-import currentUser from '../auth/currentUser'
+import { AuthProvider } from '../auth/AuthProvider'
+import { AppProps } from 'next/app'
 
 export const AuthContext = React.createContext(null)
 
-type IProps = {
-    Component: React.ReactNode
-    pageProps: any
-}
 // NOTE: functionでなくconstにすると下記エラーとなる
 // The default export is not a React Component
-export default function MyApp(props: IProps): React.ReactElement {
+export default function MyApp(props: AppProps): React.ReactElement {
     const { Component, pageProps } = props
 
     React.useEffect(() => {
@@ -54,9 +51,9 @@ export default function MyApp(props: IProps): React.ReactElement {
                     {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
                     <CssBaseline />
                     <ApolloProvider client={client}>
-                        <AuthContext.Provider value={currentUser}>
+                        <AuthProvider>
                             <Component {...pageProps} />
-                        </AuthContext.Provider>
+                        </AuthProvider>
                     </ApolloProvider>
                 </ThemeProvider>
                 j
