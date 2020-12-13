@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import Layout from '../../components/Layout'
+import Layout from '../../components/layout'
 import {
     Avatar,
     Button,
@@ -12,6 +12,7 @@ import {
 } from '@material-ui/core'
 import { fbAuth, fbDb } from '../../../functions/firebase'
 import { useRouter } from 'next/router'
+import { AuthContext } from '../../auth/AuthProvider'
 
 const useStyles = makeStyles((theme) => ({
     paper: {
@@ -36,32 +37,35 @@ const useStyles = makeStyles((theme) => ({
 const Signup = (): React.ReactElement => {
     const classes = useStyles()
     const [userId, setUserId] = useState('')
-    const [displayName, setDisplayName] = useState('')
+    const [userName, setUserName] = useState('')
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const [confirmPassword, setConfirmPassword] = useState('')
     const router = useRouter()
+    const { currentUser } = React.useContext(AuthContext)
 
     const handleChangeUserId = (e) => setUserId(e.target.value)
-    const handleChangeDisplayName = (e) => setDisplayName(e.target.value)
+    const handleChangeuserName = (e) => setUserName(e.target.value)
     const handleChangeEmail = (e) => setEmail(e.target.value)
     const handleChangePassword = (e) => setPassword(e.target.value)
     const handleChangeConfirmPassword = (e) =>
         setConfirmPassword(e.target.value)
 
     const signup = async (): Promise<void> => {
+        React.useEffect(() => {
+            currentUser && router.push('/signin')
+        })
         if (email && password) {
             await fbAuth
                 .createUserWithEmailAndPassword(email, password)
                 .then((result) => {
                     result.user.updateProfile({
-                        displayName: displayName,
+                        displayName: userName,
                     })
                 })
             fbDb.collection('users').doc(fbAuth.currentUser.uid).set({
-                fbUid: fbAuth.currentUser.uid,
                 userId: userId,
-                displayName: displayName,
+                userName: userName,
                 email: email,
             })
             router.push(`/{$fbAuth.currentUser.uid}`)
@@ -69,7 +73,7 @@ const Signup = (): React.ReactElement => {
     }
 
     return (
-        <Layout title="Signup">
+        <Layout title="ユーザー登録">
             <Container component="main" maxWidth="xs">
                 <CssBaseline />
                 <div className={classes.paper}>
@@ -82,7 +86,7 @@ const Signup = (): React.ReactElement => {
                                     required
                                     fullWidth
                                     id="userId"
-                                    label="User ID"
+                                    label="ユーザーID"
                                     name="userId"
                                     autoComplete="userId"
                                     onChange={handleChangeUserId}
@@ -93,11 +97,11 @@ const Signup = (): React.ReactElement => {
                                     variant="outlined"
                                     required
                                     fullWidth
-                                    id="displayName"
-                                    label="Display Name"
+                                    id="userName"
+                                    label="ユーザー名"
                                     name="diplayName"
-                                    autoComplete="displayName"
-                                    onChange={handleChangeDisplayName}
+                                    autoComplete="userName"
+                                    onChange={handleChangeuserName}
                                 />
                             </Grid>
                             <Grid item xs={12}>
@@ -106,7 +110,7 @@ const Signup = (): React.ReactElement => {
                                     required
                                     fullWidth
                                     id="email"
-                                    label="Email Address"
+                                    label="Eメールアドレス"
                                     name="email"
                                     autoComplete="email"
                                     onChange={handleChangeEmail}
@@ -118,7 +122,7 @@ const Signup = (): React.ReactElement => {
                                     required
                                     fullWidth
                                     name="password"
-                                    label="Password"
+                                    label="パスワード"
                                     type="password"
                                     id="password"
                                     autoComplete="current-password"
@@ -131,7 +135,7 @@ const Signup = (): React.ReactElement => {
                                     required
                                     fullWidth
                                     name="passwordConfirm"
-                                    label="Password Confirm"
+                                    label="パスワード確認"
                                     type="password"
                                     id="password"
                                     autoComplete="current-password"
@@ -146,12 +150,12 @@ const Signup = (): React.ReactElement => {
                             className={classes.submit}
                             onClick={signup}
                         >
-                            Sign Up
+                            登録
                         </Button>
                         <Grid container justify="flex-end">
                             <Grid item>
                                 <Link href="/signin" variant="body2">
-                                    Already have an account? Sign in
+                                    すでにアカウントをお持ちですか？ログイン
                                 </Link>
                             </Grid>
                         </Grid>

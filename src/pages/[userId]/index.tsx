@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import {} from '@material-ui/core'
-import Layout from '../../components/Layout'
+import Layout from '../../components/layout'
 import styled from 'styled-components'
 
 const Mypage = (): React.ReactElement => {

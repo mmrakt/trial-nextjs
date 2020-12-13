@@ -10,7 +10,7 @@ import {
     Paper,
     Button,
 } from '@material-ui/core'
-import Layout from '../../components/Layout'
+import Layout from '../../components/layout'
 import TaskItem from './TaskItem'
 import {
     usePostReportMutation,

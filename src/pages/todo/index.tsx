@@ -2,7 +2,7 @@ import React from 'react'
 import Input from './Input'
 import Filter from './Filter'
 import TodoTabPanel from './TabPanel'
-import Layout from '@/components/Layout'
+import Layout from '@/components/layout'
 import { Container } from '@material-ui/core'
 
 const Todo = (): React.ReactElement => {
