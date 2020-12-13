@@ -2,9 +2,6 @@ import React from 'react'
 import {
     Drawer as DrawerEl,
     List,
-    ListItem,
-    ListItemAvatar,
-    ListItemText,
     Divider,
     IconButton,
     Theme,
@@ -19,9 +16,8 @@ import MenuIcon from '@material-ui/icons/Menu'
 import AssignmentTurnedInIcon from '@material-ui/icons/AssignmentTurnedIn'
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft'
 import ChevronRightIcon from '@material-ui/icons/ChevronRight'
-import Link from 'next/link'
-import { useRouter } from 'next/router'
-import { formatDate } from '../utils/date'
+import { formatDate } from '../../utils/date'
+import DrawerItem from './drawerItem'
 
 type IProps = {
     isOpenDrawer: boolean
@@ -51,10 +47,33 @@ const Drawer = (props: IProps): React.ReactElement => {
     const { isOpenDrawer, handleClose } = props
     const theme = useTheme()
     const classes = useStyles()
-    const router = useRouter()
-    const handleRouting = () => {
-        router.push(`/submit/${formatDate(new Date())}`)
-    }
+    const drawerItemList = [
+        {
+            href: '/',
+            icon: <MenuIcon />,
+            listItemText: 'トップメニュー',
+        },
+        {
+            href: `/submit/${formatDate(new Date())}`,
+            icon: <NoteAddIcon />,
+            listItemText: '日報の提出',
+        },
+        {
+            href: '/check',
+            icon: <LibraryAddCheckIcon />,
+            listItemText: '提出状況確認',
+        },
+        {
+            href: '/aggregate',
+            icon: <EqualizerIcon />,
+            listItemText: '集計データ確認',
+        },
+        {
+            href: '/todo',
+            icon: <AssignmentTurnedInIcon />,
+            listItemText: 'ToDo管理',
+        },
+    ]
     return (
         <>
             <DrawerEl
@@ -76,44 +95,14 @@ const Drawer = (props: IProps): React.ReactElement => {
                 </div>
                 <Divider />
                 <List>
-                    <Link href="/">
-                        <ListItem button>
-                            <ListItemAvatar>
-                                <MenuIcon />
-                            </ListItemAvatar>
-                            <ListItemText>トップメニュー</ListItemText>
-                        </ListItem>
-                    </Link>
-                    <Link href="/check">
-                        <ListItem button>
-                            <ListItemAvatar>
-                                <LibraryAddCheckIcon />
-                            </ListItemAvatar>
-                            <ListItemText>提出状況確認</ListItemText>
-                        </ListItem>
-                    </Link>
-                    <ListItem button onClick={handleRouting}>
-                        <ListItemAvatar>
-                            <NoteAddIcon />
-                        </ListItemAvatar>
-                        <ListItemText>提出フォーム</ListItemText>
-                    </ListItem>
-                    <Link href="/aggregate">
-                        <ListItem button>
-                            <ListItemAvatar>
-                                <EqualizerIcon />
-                            </ListItemAvatar>
-                            <ListItemText>集計データ確認</ListItemText>
-                        </ListItem>
-                    </Link>
-                    <Link href="/todo">
-                        <ListItem button>
-                            <ListItemAvatar>
-                                <AssignmentTurnedInIcon />
-                            </ListItemAvatar>
-                            <ListItemText>ToDo管理</ListItemText>
-                        </ListItem>
-                    </Link>
+                    {drawerItemList.map((drawerItem, index) => (
+                        <DrawerItem
+                            key={index}
+                            href={drawerItem.href}
+                            icon={drawerItem.icon}
+                            listItemText={drawerItem.listItemText}
+                        />
+                    ))}
                 </List>
             </DrawerEl>
         </>
