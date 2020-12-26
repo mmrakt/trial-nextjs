@@ -36,14 +36,22 @@ const useStyles = makeStyles((theme) => ({
 
 const Settings = (): React.ReactElement => {
     const classes = useStyles()
-    const router = useRouter()
+    // const router = useRouter()
     const { signinAccount } = React.useContext(AuthContext)
-    const [editedUserName, setEditedUserName] = useState(
-        JSON.parse(localStorage.getItem('signinAccount'))['userName']
-    )
-    const [editedProfile, setEditedProfile] = useState(
-        JSON.parse(localStorage.getItem('signinAccount'))['profile']
-    )
+    const [editedUserName, setEditedUserName] = useState('')
+    const [editedProfile, setEditedProfile] = useState('')
+
+    React.useEffect(() => {
+        //NOTE: https://stackoverflow.com/questions/52474208/react-localstorage-is-not-defined-error-showing
+        if (typeof window !== 'undefined') {
+            setEditedUserName(
+                JSON.parse(localStorage.getItem('signinAccount'))['userName']
+            )
+            setEditedProfile(
+                JSON.parse(localStorage.getItem('signinAccount'))['profile']
+            )
+        }
+    }, [])
 
     const handleUpdateAccount = async (): Promise<void> => {
         await fbDb
@@ -69,7 +77,7 @@ const Settings = (): React.ReactElement => {
             .catch((error) => {
                 console.log(error.message)
             })
-        router.push(`/${signinAccount.userId}`)
+        location.href = `/${signinAccount.userId}`
     }
     return (
         <Layout title="アカウント設定">
