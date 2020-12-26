@@ -11,17 +11,9 @@ interface IAuthContext {
           }
         | null
         | undefined
-    userName: string | null
-    setUserName: any
-    profile: string | null
-    setProfile: any
 }
 const AuthContext = React.createContext<IAuthContext>({
     signinAccount: undefined,
-    userName: undefined,
-    setUserName: undefined,
-    profile: undefined,
-    setProfile: undefined,
 })
 
 type IProps = {
@@ -30,9 +22,8 @@ type IProps = {
 
 const AuthProvider = (props: IProps): React.ReactElement => {
     const [signinAccount, setSigninAccount] = React.useState(null)
-    const [userName, setUserName] = React.useState(null)
-    const [profile, setProfile] = React.useState(null)
 
+    //NOTE: usersコレクションから取得し、stateとlocalstorageそれぞれにセット
     React.useEffect(() => {
         fbAuth.onAuthStateChanged((user) => {
             if (user) {
@@ -41,8 +32,16 @@ const AuthProvider = (props: IProps): React.ReactElement => {
                     .get()
                     .then((doc) => {
                         setSigninAccount(doc.data())
-                        setUserName(doc.data().userName)
-                        setProfile(doc.data().profile)
+                        localStorage.setItem(
+                            'signinAccount',
+                            JSON.stringify({
+                                userName: doc.data().userName,
+                                profile: doc.data().profile,
+                            })
+                        )
+                    })
+                    .then(() => {
+                        console.log('succuess!')
                     })
             }
         })
@@ -52,10 +51,6 @@ const AuthProvider = (props: IProps): React.ReactElement => {
         <AuthContext.Provider
             value={{
                 signinAccount: signinAccount,
-                userName: userName,
-                setUserName: setUserName,
-                profile: profile,
-                setProfile: setProfile,
             }}
         >
             {props.children}

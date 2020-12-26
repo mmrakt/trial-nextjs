@@ -4,9 +4,10 @@ import { Menu, MenuItem, Avatar, Button } from '@material-ui/core'
 import Link from 'next/link'
 import { AuthContext } from '../../auth/AuthProvider'
 import { fbAuth } from 'functions/firebase'
+import { useRouter } from 'next/router'
 
 const MenuList = (): React.ReactElement => {
-    const { currentUser } = React.useContext(AuthContext)
+    const { signinAccount } = React.useContext(AuthContext)
     const [isOpenMenu, setIsOpenMenu] = React.useState(null)
     const handleClick = (e) => {
         setIsOpenMenu(e.currentTarget)
@@ -16,6 +17,7 @@ const MenuList = (): React.ReactElement => {
     }
     const handleSignout = React.useCallback(async () => {
         await fbAuth.signOut()
+        useRouter().push('/')
     }, [])
 
     return (
@@ -34,18 +36,16 @@ const MenuList = (): React.ReactElement => {
                 open={Boolean(isOpenMenu)}
                 onClose={handleClose}
             >
-                {currentUser ? (
+                {signinAccount ? (
                     // NOTE: Material-uiのコンポーネント内でfragmentを使うとエラーになる
                     <div>
                         <MenuItem onClick={handleClose}>
-                            <Link href={`/${currentUser.userId}`}>
+                            <Link href={`/${signinAccount.userId}`}>
                                 <a>マイページ</a>
                             </Link>
                         </MenuItem>
                         <MenuItem onClick={handleClose}>
-                            <li onClick={handleSignout}>
-                                <a>ログアウト</a>
-                            </li>
+                            <a onClick={handleSignout}>ログアウト</a>
                         </MenuItem>
                     </div>
                 ) : (

@@ -4,6 +4,8 @@ import MenuIcon from '@material-ui/icons/Menu'
 import { Toolbar, Button, AppBar } from '@material-ui/core'
 import Drawer from './drawer'
 import MenuList from './menuList'
+import Link from 'next/link'
+import styled from 'styled-components'
 
 const useStyles = makeStyles((theme) => ({
     menuButton: {
@@ -19,6 +21,10 @@ const useStyles = makeStyles((theme) => ({
         float: 'right',
     },
 }))
+const AppTitle = styled.a`
+    text-decoration: none;
+    cursor: pointer;
+`
 
 const Header = (): React.ReactElement => {
     const classes = useStyles()
@@ -40,9 +46,9 @@ const Header = (): React.ReactElement => {
                         isOpenDrawer={isOpenDrawer}
                         handleClose={handleDrawer}
                     />
-                    <Button color="inherit" className={classes.titleButton}>
-                        日報つーる
-                    </Button>
+                    <Link href="/">
+                        <AppTitle>日報ツール</AppTitle>
+                    </Link>
                     <MenuList />
                 </Toolbar>
             </AppBar>

@@ -42,18 +42,11 @@ const Signup = (): React.ReactElement => {
     const [password, setPassword] = useState('')
     const [confirmPassword, setConfirmPassword] = useState('')
     const router = useRouter()
-    const { currentUser } = React.useContext(AuthContext)
-
-    const handleChangeUserId = (e) => setUserId(e.target.value)
-    const handleChangeuserName = (e) => setUserName(e.target.value)
-    const handleChangeEmail = (e) => setEmail(e.target.value)
-    const handleChangePassword = (e) => setPassword(e.target.value)
-    const handleChangeConfirmPassword = (e) =>
-        setConfirmPassword(e.target.value)
+    const { signinAccount } = React.useContext(AuthContext)
 
     const signup = async (): Promise<void> => {
         React.useEffect(() => {
-            currentUser && router.push('/signin')
+            signinAccount && router.push('/signin')
         })
         if (email && password) {
             await fbAuth
@@ -89,7 +82,11 @@ const Signup = (): React.ReactElement => {
                                     label="ユーザーID"
                                     name="userId"
                                     autoComplete="userId"
-                                    onChange={handleChangeUserId}
+                                    onChange={(
+                                        e: React.ChangeEvent<HTMLInputElement>
+                                    ) => {
+                                        setUserId(e.target.value)
+                                    }}
                                 />
                             </Grid>
                             <Grid item xs={12}>
@@ -101,7 +98,11 @@ const Signup = (): React.ReactElement => {
                                     label="ユーザー名"
                                     name="diplayName"
                                     autoComplete="userName"
-                                    onChange={handleChangeuserName}
+                                    onChange={(
+                                        e: React.ChangeEvent<HTMLInputElement>
+                                    ) => {
+                                        setUserName(e.target.value)
+                                    }}
                                 />
                             </Grid>
                             <Grid item xs={12}>
@@ -113,7 +114,11 @@ const Signup = (): React.ReactElement => {
                                     label="Eメールアドレス"
                                     name="email"
                                     autoComplete="email"
-                                    onChange={handleChangeEmail}
+                                    onChange={(
+                                        e: React.ChangeEvent<HTMLInputElement>
+                                    ) => {
+                                        setEmail(e.target.value)
+                                    }}
                                 />
                             </Grid>
                             <Grid item xs={12}>
@@ -126,7 +131,11 @@ const Signup = (): React.ReactElement => {
                                     type="password"
                                     id="password"
                                     autoComplete="current-password"
-                                    onChange={handleChangePassword}
+                                    onChange={(
+                                        e: React.ChangeEvent<HTMLInputElement>
+                                    ) => {
+                                        setPassword(e.target.value)
+                                    }}
                                 />
                             </Grid>
                             <Grid item xs={12}>
@@ -139,7 +148,11 @@ const Signup = (): React.ReactElement => {
                                     type="password"
                                     id="password"
                                     autoComplete="current-password"
-                                    onChange={handleChangeConfirmPassword}
+                                    onChange={(
+                                        e: React.ChangeEvent<HTMLInputElement>
+                                    ) => {
+                                        setConfirmPassword(e.target.value)
+                                    }}
                                 />
                             </Grid>
                         </Grid>
