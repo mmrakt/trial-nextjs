@@ -2,17 +2,26 @@ import React from 'react'
 import { fbAuth, fbDb } from '../../functions/firebase'
 
 interface IAuthContext {
-    currentUser:
+    signinAccount:
         | {
               userId: string
               userName: string
               email: string
+              profile: string
           }
         | null
         | undefined
+    userName: string | null
+    setUserName: any
+    profile: string | null
+    setProfile: any
 }
 const AuthContext = React.createContext<IAuthContext>({
-    currentUser: undefined,
+    signinAccount: undefined,
+    userName: undefined,
+    setUserName: undefined,
+    profile: undefined,
+    setProfile: undefined,
 })
 
 type IProps = {
@@ -20,7 +29,9 @@ type IProps = {
 }
 
 const AuthProvider = (props: IProps): React.ReactElement => {
-    const [currentUser, setCurrentUser] = React.useState(null)
+    const [signinAccount, setSigninAccount] = React.useState(null)
+    const [userName, setUserName] = React.useState(null)
+    const [profile, setProfile] = React.useState(null)
 
     React.useEffect(() => {
         fbAuth.onAuthStateChanged((user) => {
@@ -29,14 +40,24 @@ const AuthProvider = (props: IProps): React.ReactElement => {
                     .doc(user.uid)
                     .get()
                     .then((doc) => {
-                        setCurrentUser(doc)
+                        setSigninAccount(doc.data())
+                        setUserName(doc.data().userName)
+                        setProfile(doc.data().profile)
                     })
             }
         })
     }, [])
 
     return (
-        <AuthContext.Provider value={{ currentUser: currentUser }}>
+        <AuthContext.Provider
+            value={{
+                signinAccount: signinAccount,
+                userName: userName,
+                setUserName: setUserName,
+                profile: profile,
+                setProfile: setProfile,
+            }}
+        >
             {props.children}
         </AuthContext.Provider>
     )
