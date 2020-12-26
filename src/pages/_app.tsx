@@ -4,7 +4,7 @@ import { ThemeProvider } from '@material-ui/core/styles'
 import CssBaseline from '@material-ui/core/CssBaseline'
 import theme from '../components/theme'
 import { Provider } from 'react-redux'
-import store from '../store'
+import store from '../store/store'
 import { ApolloClient, InMemoryCache, HttpLink } from '@apollo/client'
 import { ApolloProvider } from '@apollo/react-hooks'
 import 'minireset.css'
@@ -32,6 +32,7 @@ export default function MyApp(props: AppProps): React.ReactElement {
         return new ApolloClient({
             link: new HttpLink({
                 uri: 'http://localhost:8080/v1/graphql',
+                credentials: 'same-origin',
             }),
             cache: new InMemoryCache(),
         })
