@@ -40,8 +40,7 @@ const Settings = (): React.ReactElement => {
     const { signinAccount } = React.useContext(AuthContext)
     const [editedUserName, setEditedUserName] = useState('')
     const [editedProfile, setEditedProfile] = useState('')
-
-    const [src, setSrc] = useState(null)
+    const [src, setSrc] = useState<any>(null)
     const [crop, setCrop] = useState<Crop>({
         unit: '%',
         x: 0,
@@ -51,7 +50,6 @@ const Settings = (): React.ReactElement => {
         aspect: 1,
     })
     const [imageRef, setImageRef] = useState<HTMLImageElement | null>(null)
-    const [imageUrl, setImageUrl] = useState<string>('')
     const [croppedImageUrl, setCroppedImageUrl] = useState<string>('')
     const [croppedBlob, setCroppedBlob] = useState<Blob>(null)
 
@@ -115,38 +113,47 @@ const Settings = (): React.ReactElement => {
         }
     }
     const onUploadAvatar = (): void => {
-        fbStorage
-            .ref()
-            .child(
-                'images/' + formatDateTime(new Date()) + signinAccount.userId
-            )
-            .put(croppedBlob)
-            .then((snapshot) => {
-                snapshot.ref.getDownloadURL().then((avatarUrl) => {
-                    setImageUrl(avatarUrl)
+        try {
+            fbStorage
+                .ref()
+                .child(
+                    'images/' +
+                        formatDateTime(new Date()) +
+                        signinAccount.userId
+                )
+                .put(croppedBlob)
+                .then((snapshot) => {
+                    snapshot.ref.getDownloadURL().then((avatarURL: string) => {
+                        updateAccountAvatarOnFbDB(avatarURL)
+                        updatePhotoURLOnFbAuth(avatarURL)
+                    })
                 })
-            })
+        } catch (error) {
+            console.log(error)
+        }
+    }
+    const updateAccountAvatarOnFbDB = (avatarURL: string) => {
+        fbDb.collection('users')
+            .doc(fbAuth.currentUser.uid)
+            .set(
+                {
+                    avatarURL,
+                },
+                {
+                    merge: true,
+                }
+            )
             .catch((error) => {
                 console.log(error)
             })
     }
-    // const update = () => {
-    //     fbDb.collection('users').doc(fbAuth.currentUser.uid).set(
-    //         {
-    //             avatarUrl: imageUrl,
-    //         },
-    //         {
-    //             merge: true,
-    //         }
-    //     )
-    // }
-    const updateFbAuthPhotoURL = () => {
+    const updatePhotoURLOnFbAuth = (avatarURL: string) => {
         fbAuth.currentUser.updateProfile({
-            photoURL: imageUrl,
+            photoURL: avatarURL,
         })
     }
 
-    const onUpdateAccount = async (): Promise<void> => {
+    const onUpdateAccountOnFbDB = async (): Promise<void> => {
         await fbDb
             .collection('users')
             .doc(fbAuth.currentUser.uid)
@@ -158,7 +165,6 @@ const Settings = (): React.ReactElement => {
                 { merge: true }
             )
             .then(() => {
-                console.log('update success!')
                 updateAccountOnLocalStorage()
             })
             .catch((error) => {
@@ -247,7 +253,7 @@ const Settings = (): React.ReactElement => {
                                 variant="contained"
                                 color="primary"
                                 className={classes.submit}
-                                onClick={onUpdateAccount}
+                                onClick={onUpdateAccountOnFbDB}
                             >
                                 更新
                             </Button>
