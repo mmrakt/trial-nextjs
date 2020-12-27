@@ -11,8 +11,9 @@ import {
     makeStyles,
     Container,
 } from '@material-ui/core'
-import { fbDb, fbAuth } from '../../../functions/firebase'
-import { useRouter } from 'next/router'
+import { fbDb, fbAuth, fbStorage } from '../../../functions/firebase'
+import ReactCrop, { Crop } from 'react-image-crop'
+import { formatDateTime } from '../../utils/date'
 
 const useStyles = makeStyles((theme) => ({
     paper: {
@@ -36,10 +37,23 @@ const useStyles = makeStyles((theme) => ({
 
 const Settings = (): React.ReactElement => {
     const classes = useStyles()
-    // const router = useRouter()
     const { signinAccount } = React.useContext(AuthContext)
     const [editedUserName, setEditedUserName] = useState('')
     const [editedProfile, setEditedProfile] = useState('')
+
+    const [src, setSrc] = useState(null)
+    const [crop, setCrop] = useState<Crop>({
+        unit: '%',
+        x: 0,
+        y: 0,
+        width: 50,
+        height: 50,
+        aspect: 1,
+    })
+    const [imageRef, setImageRef] = useState<HTMLImageElement | null>(null)
+    const [imageUrl, setImageUrl] = useState<string>('')
+    const [croppedImageUrl, setCroppedImageUrl] = useState<string>('')
+    const [croppedBlob, setCroppedBlob] = useState<Blob>(null)
 
     React.useEffect(() => {
         //NOTE: https://stackoverflow.com/questions/52474208/react-localstorage-is-not-defined-error-showing
@@ -53,7 +67,86 @@ const Settings = (): React.ReactElement => {
         }
     }, [])
 
-    const handleUpdateAccount = async (): Promise<void> => {
+    const onSelectFile = (e: React.ChangeEvent<HTMLInputElement>) => {
+        if (e.target.files && e.target.files.length > 0) {
+            const reader = new FileReader()
+            reader.addEventListener('load', () => {
+                setSrc(reader.result)
+            })
+            reader.readAsDataURL(e.target.files[0])
+        }
+    }
+    const onImageLoaded = (image: HTMLImageElement) => {
+        setImageRef(image)
+    }
+    const onCropChange = (crop: Crop) => {
+        setCrop(crop)
+    }
+    const onCropComplete = async (crop: any) => {
+        if (imageRef && crop.width && crop.height) {
+            const canvas = document.createElement('canvas')
+            const scaleX = imageRef.naturalWidth / imageRef.width
+            const scaleY = imageRef.naturalHeight / imageRef.height
+            canvas.width = crop.width
+            canvas.height = crop.height
+            const ctx = canvas.getContext('2d')
+            if (ctx !== null) {
+                ctx.drawImage(
+                    imageRef,
+                    crop.x * scaleX,
+                    crop.y * scaleY,
+                    crop.width * scaleX,
+                    crop.height * scaleY,
+                    0,
+                    0,
+                    crop.width,
+                    crop.height
+                )
+            }
+            canvas.toBlob(
+                async (blob) => {
+                    window.URL.revokeObjectURL(croppedImageUrl)
+                    setCroppedImageUrl(window.URL.createObjectURL(blob))
+                    setCroppedBlob(blob)
+                },
+                'image/jpeg',
+                0.95
+            )
+        }
+    }
+    const onUploadAvatar = (): void => {
+        fbStorage
+            .ref()
+            .child(
+                'images/' + formatDateTime(new Date()) + signinAccount.userId
+            )
+            .put(croppedBlob)
+            .then((snapshot) => {
+                snapshot.ref.getDownloadURL().then((avatarUrl) => {
+                    setImageUrl(avatarUrl)
+                })
+            })
+            .catch((error) => {
+                console.log(error)
+            })
+    }
+    // const update = () => {
+    //     fbDb.collection('users').doc(fbAuth.currentUser.uid).set(
+    //         {
+    //             avatarUrl: imageUrl,
+    //         },
+    //         {
+    //             merge: true,
+    //         }
+    //     )
+    // }
+    const updateFbAuthPhotoURL = () => {
+        fbAuth.currentUser.updateProfile({
+            photoURL: imageUrl,
+        })
+    }
+
+    const onUpdateAccount = async (): Promise<void> => {
         await fbDb
             .collection('users')
             .doc(fbAuth.currentUser.uid)
@@ -66,18 +159,22 @@ const Settings = (): React.ReactElement => {
             )
             .then(() => {
                 console.log('update success!')
-                localStorage.setItem(
-                    'signinAccount',
-                    JSON.stringify({
-                        userName: editedUserName,
-                        profile: editedProfile,
-                    })
-                )
+                updateAccountOnLocalStorage()
             })
             .catch((error) => {
                 console.log(error.message)
             })
         location.href = `/${signinAccount.userId}`
+    }
+
+    const updateAccountOnLocalStorage = () => {
+        localStorage.setItem(
+            'signinAccount',
+            JSON.stringify({
+                userName: editedUserName,
+                profile: editedProfile,
+            })
+        )
     }
     return (
         <Layout title="アカウント設定">
@@ -86,6 +183,33 @@ const Settings = (): React.ReactElement => {
                     <CssBaseline />
                     <div className={classes.paper}>
                         <Avatar className={classes.avatar}></Avatar>
+                        <div>
+                            <input
+                                type="file"
+                                accept="image/*"
+                                onChange={onSelectFile}
+                            />
+                        </div>
+                        {src && (
+                            <ReactCrop
+                                src={src}
+                                crop={crop}
+                                onImageLoaded={onImageLoaded}
+                                onComplete={onCropComplete}
+                                onChange={onCropChange}
+                                ruleOfThirds
+                            />
+                        )}
+                        {croppedImageUrl && (
+                            <div>
+                                <img
+                                    alt="Crop"
+                                    style={{ maxWidth: '100%' }}
+                                    src={croppedImageUrl}
+                                />
+                                <button onClick={onUploadAvatar}>OK</button>
+                            </div>
+                        )}
                         <form className={classes.form} noValidate>
                             <Grid container spacing={2}>
                                 <Grid item xs={12}>
@@ -123,7 +247,7 @@ const Settings = (): React.ReactElement => {
                                 variant="contained"
                                 color="primary"
                                 className={classes.submit}
-                                onClick={handleUpdateAccount}
+                                onClick={onUpdateAccount}
                             >
                                 更新
                             </Button>

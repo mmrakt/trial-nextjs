@@ -6,3 +6,13 @@ export const formatDate = (date: any): any => {
     day = ('0' + day).slice(-2)
     return year + month + day
 }
+
+export const formatDateTime = (today: any): any => {
+    const year = today.getFullYear()
+    const month = today.getMonth() + 1
+    const day = today.getDate()
+    const hour = today.getHours()
+    const minute = today.getMinutes()
+    const secound = today.getSeconds()
+    return year + '' + month + '' + day + '' + hour + '' + minute + '' + secound
+}
