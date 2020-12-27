@@ -57,7 +57,6 @@ export default function MyApp(props: AppProps): React.ReactElement {
                         </AuthProvider>
                     </ApolloProvider>
                 </ThemeProvider>
-                j
             </Provider>
         </>
     )

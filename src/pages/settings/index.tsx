@@ -3,7 +3,6 @@ import {} from '@material-ui/core'
 import Layout from '../../components/layout'
 import { AuthContext } from '../../auth/AuthProvider'
 import {
-    Avatar,
     Button,
     CssBaseline,
     TextField,
@@ -13,15 +12,37 @@ import {
 } from '@material-ui/core'
 import { fbDb, fbAuth, fbStorage } from '../../../functions/firebase'
 import ReactCrop, { Crop } from 'react-image-crop'
+import 'react-image-crop/dist/ReactCrop.css'
 import { formatDateTime } from '../../utils/date'
+import Modal from 'react-modal'
+import styled from 'styled-components'
+
+const AvatarImg = styled.img`
+    border-radius: 50%;
+    height: 100px;
+    width: 100px;
+`
+
+const modalStyle = {
+    overlay: {
+        position: 'fixed',
+        top: 0,
+        left: 0,
+        backgroundColor: 'rgba(0,0,0,0.85)',
+    },
+    content: {
+        position: 'absolute',
+        top: '5rem',
+        left: '5rem',
+        right: '5rem',
+        bottom: '5rem',
+        backgroundColor: 'white',
+        padding: '1.5rem',
+    },
+}
 
 const useStyles = makeStyles((theme) => ({
-    paper: {
-        marginTop: theme.spacing(8),
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-    },
+    paper: {},
     avatar: {
         margin: theme.spacing(1),
         backgroundColor: theme.palette.secondary.main,
@@ -52,6 +73,7 @@ const Settings = (): React.ReactElement => {
     const [imageRef, setImageRef] = useState<HTMLImageElement | null>(null)
     const [croppedImageUrl, setCroppedImageUrl] = useState<string>('')
     const [croppedBlob, setCroppedBlob] = useState<Blob>(null)
+    const [modalIsOpen, setModalIsOpen] = useState<boolean>(false)
 
     React.useEffect(() => {
         //NOTE: https://stackoverflow.com/questions/52474208/react-localstorage-is-not-defined-error-showing
@@ -70,6 +92,7 @@ const Settings = (): React.ReactElement => {
             const reader = new FileReader()
             reader.addEventListener('load', () => {
                 setSrc(reader.result)
+                setModalIsOpen(true)
             })
             reader.readAsDataURL(e.target.files[0])
         }
@@ -123,10 +146,15 @@ const Settings = (): React.ReactElement => {
                 )
                 .put(croppedBlob)
                 .then((snapshot) => {
-                    snapshot.ref.getDownloadURL().then((avatarURL: string) => {
-                        updateAccountAvatarOnFbDB(avatarURL)
-                        updatePhotoURLOnFbAuth(avatarURL)
-                    })
+                    snapshot.ref
+                        .getDownloadURL()
+                        .then(async (avatarURL: string) => {
+                            await updateAccountAvatarOnFbDB(avatarURL)
+                            await updatePhotoURLOnFbAuth(avatarURL)
+                            setModalIsOpen(false)
+                            // TODO: DOMの更新をかけてアバターを変更する方法を探る
+                            location.href = '/settings'
+                        })
                 })
         } catch (error) {
             console.log(error)
@@ -188,7 +216,11 @@ const Settings = (): React.ReactElement => {
                 <Container component="main" maxWidth="xs">
                     <CssBaseline />
                     <div className={classes.paper}>
-                        <Avatar className={classes.avatar}></Avatar>
+                        {signinAccount.avatarURL ? (
+                            <AvatarImg src={signinAccount.avatarURL} />
+                        ) : (
+                            <AvatarImg src="/profile.png" />
+                        )}
                         <div>
                             <input
                                 type="file"
@@ -197,24 +229,40 @@ const Settings = (): React.ReactElement => {
                             />
                         </div>
                         {src && (
-                            <ReactCrop
-                                src={src}
-                                crop={crop}
-                                onImageLoaded={onImageLoaded}
-                                onComplete={onCropComplete}
-                                onChange={onCropChange}
-                                ruleOfThirds
-                            />
-                        )}
-                        {croppedImageUrl && (
-                            <div>
-                                <img
-                                    alt="Crop"
-                                    style={{ maxWidth: '100%' }}
-                                    src={croppedImageUrl}
+                            <Modal
+                                isOpen={modalIsOpen}
+                                style={modalStyle}
+                                onRequestClose={() => setModalIsOpen(false)}
+                                ariaHideApp={false}
+                            >
+                                <ReactCrop
+                                    src={src}
+                                    crop={crop}
+                                    onImageLoaded={onImageLoaded}
+                                    onComplete={onCropComplete}
+                                    onChange={onCropChange}
+                                    ruleOfThirds
                                 />
-                                <button onClick={onUploadAvatar}>OK</button>
-                            </div>
+                                <div>
+                                    <Button
+                                        variant="contained"
+                                        onClick={() => {
+                                            setModalIsOpen(false)
+                                        }}
+                                    >
+                                        キャンセル
+                                    </Button>
+                                    {croppedImageUrl && (
+                                        <Button
+                                            variant="contained"
+                                            color="primary"
+                                            onClick={onUploadAvatar}
+                                        >
+                                            OK
+                                        </Button>
+                                    )}
+                                </div>
+                            </Modal>
                         )}
                         <form className={classes.form} noValidate>
                             <Grid container spacing={2}>

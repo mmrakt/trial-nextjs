@@ -8,6 +8,7 @@ interface IAuthContext {
               userName: string
               email: string
               profile: string
+              avatarURL: string
           }
         | null
         | undefined
