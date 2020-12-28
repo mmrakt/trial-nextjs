@@ -7,6 +7,7 @@ import ReactCrop, { Crop } from 'react-image-crop'
 import 'react-image-crop/dist/ReactCrop.css'
 import { formatDateTime } from '../../utils/date'
 import Modal from 'react-modal'
+import { defaultCrop, imageCropped } from '../../utils/crop'
 
 const modalStyle = {
     overlay: {
@@ -35,14 +36,7 @@ type IProps = {
 const AvatalTrimmingModal = (props: IProps): React.ReactElement => {
     const { signinAccount, setSigninAccount } = React.useContext(AuthContext)
     const { src, modalIsOpen, onRequestClose } = props
-    const [crop, setCrop] = useState<Crop>({
-        unit: '%',
-        x: 0,
-        y: 0,
-        width: 50,
-        height: 50,
-        aspect: 1,
-    })
+    const [crop, setCrop] = useState<Crop>(defaultCrop)
     const [imageRef, setImageRef] = useState<HTMLImageElement | null>(null)
     const [croppedImageUrl, setCroppedImageUrl] = useState<string>('')
     const [croppedBlob, setCroppedBlob] = useState<Blob>(null)
@@ -53,29 +47,11 @@ const AvatalTrimmingModal = (props: IProps): React.ReactElement => {
     const onCropChange = (crop: Crop) => {
         setCrop(crop)
     }
-    const onCropComplete = async (crop: any) => {
-        if (imageRef && crop.width && crop.height) {
-            const canvas = document.createElement('canvas')
-            const scaleX = imageRef.naturalWidth / imageRef.width
-            const scaleY = imageRef.naturalHeight / imageRef.height
-            canvas.width = crop.width
-            canvas.height = crop.height
-            const ctx = canvas.getContext('2d')
-            if (ctx !== null) {
-                ctx.drawImage(
-                    imageRef,
-                    crop.x * scaleX,
-                    crop.y * scaleY,
-                    crop.width * scaleX,
-                    crop.height * scaleY,
-                    0,
-                    0,
-                    crop.width,
-                    crop.height
-                )
-            }
+    const onCropComplete = (crop: Crop) => {
+        const canvas = imageCropped(imageRef, crop)
+        if (canvas !== undefined) {
             canvas.toBlob(
-                async (blob) => {
+                (blob) => {
                     window.URL.revokeObjectURL(croppedImageUrl)
                     setCroppedImageUrl(window.URL.createObjectURL(blob))
                     setCroppedBlob(blob)
@@ -92,32 +68,28 @@ const AvatalTrimmingModal = (props: IProps): React.ReactElement => {
                 .child('images/' + formatDateTime(new Date()))
                 .put(croppedBlob)
                 .then((snapshot) => {
-                    snapshot.ref
-                        .getDownloadURL()
-                        .then(async (avatarURL: string) => {
-                            await updateAccountAvatarOnFbDB(avatarURL)
-                            await updatePhotoURLOnFbAuth(avatarURL)
-                            onRequestClose()
-                        })
+                    snapshot.ref.getDownloadURL().then((avatarURL: string) => {
+                        updateAccountAvatarOnFbDB(avatarURL)
+                        updateAuthContext(avatarURL)
+                        updatePhotoURLOnFbAuth(avatarURL)
+                        onRequestClose()
+                    })
                 })
         } catch (error) {
             console.log(error)
         }
     }
     const updateAccountAvatarOnFbDB = (avatarURL: string) => {
-        fbDb.collection('users')
-            .doc(fbAuth.currentUser.uid)
-            .set(
-                {
-                    avatarURL,
-                },
-                {
-                    merge: true,
-                }
-            )
-            .catch((error) => {
-                console.log(error)
-            })
+        fbDb.collection('users').doc(fbAuth.currentUser.uid).set(
+            {
+                avatarURL,
+            },
+            {
+                merge: true,
+            }
+        )
+    }
+    const updateAuthContext = (avatarURL: string): void => {
         setSigninAccount({
             userId: signinAccount.userId,
             userName: signinAccount.userName,
@@ -126,7 +98,7 @@ const AvatalTrimmingModal = (props: IProps): React.ReactElement => {
             avatarURL,
         })
     }
-    const updatePhotoURLOnFbAuth = (avatarURL: string) => {
+    const updatePhotoURLOnFbAuth = (avatarURL: string): void => {
         fbAuth.currentUser.updateProfile({
             photoURL: avatarURL,
         })

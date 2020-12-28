@@ -27,7 +27,11 @@ const Mypage = (): React.ReactElement => {
             {signinAccount && (
                 <FlexContainer>
                     <p className="flexItem">
-                        <AvatarImg src="/profile.png" />
+                        {signinAccount.avatarURL ? (
+                            <AvatarImg src={signinAccount.avatarURL} />
+                        ) : (
+                            <AvatarImg src="/profile.png" />
+                        )}
                     </p>
                     <div className="flexItem">
                         <Typography variant="h5" component="h2">

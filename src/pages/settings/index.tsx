@@ -12,7 +12,7 @@ import {
 } from '@material-ui/core'
 import { fbDb, fbAuth } from '../../../functions/firebase'
 import 'react-image-crop/dist/ReactCrop.css'
-import AvatalTrimmingModal from './Modal'
+import AvatalTrimmingModal from './AvatarTrimmingModal'
 import styled from 'styled-components'
 
 const AvatarImg = styled.img`
