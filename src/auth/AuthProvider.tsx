@@ -12,9 +12,11 @@ interface IAuthContext {
           }
         | null
         | undefined
+    setSigninAccount: React.Dispatch<any>
 }
 const AuthContext = React.createContext<IAuthContext>({
     signinAccount: undefined,
+    setSigninAccount: undefined,
 })
 
 type IProps = {
@@ -52,6 +54,7 @@ const AuthProvider = (props: IProps): React.ReactElement => {
         <AuthContext.Provider
             value={{
                 signinAccount: signinAccount,
+                setSigninAccount: setSigninAccount,
             }}
         >
             {props.children}

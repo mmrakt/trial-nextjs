@@ -10,11 +10,9 @@ import {
     makeStyles,
     Container,
 } from '@material-ui/core'
-import { fbDb, fbAuth, fbStorage } from '../../../functions/firebase'
-import ReactCrop, { Crop } from 'react-image-crop'
+import { fbDb, fbAuth } from '../../../functions/firebase'
 import 'react-image-crop/dist/ReactCrop.css'
-import { formatDateTime } from '../../utils/date'
-import Modal from 'react-modal'
+import AvatalTrimmingModal from './Modal'
 import styled from 'styled-components'
 
 const AvatarImg = styled.img`
@@ -22,24 +20,6 @@ const AvatarImg = styled.img`
     height: 100px;
     width: 100px;
 `
-
-const modalStyle = {
-    overlay: {
-        position: 'fixed',
-        top: 0,
-        left: 0,
-        backgroundColor: 'rgba(0,0,0,0.85)',
-    },
-    content: {
-        position: 'absolute',
-        top: '5rem',
-        left: '5rem',
-        right: '5rem',
-        bottom: '5rem',
-        backgroundColor: 'white',
-        padding: '1.5rem',
-    },
-}
 
 const useStyles = makeStyles((theme) => ({
     paper: {},
@@ -62,17 +42,6 @@ const Settings = (): React.ReactElement => {
     const [editedUserName, setEditedUserName] = useState('')
     const [editedProfile, setEditedProfile] = useState('')
     const [src, setSrc] = useState<any>(null)
-    const [crop, setCrop] = useState<Crop>({
-        unit: '%',
-        x: 0,
-        y: 0,
-        width: 50,
-        height: 50,
-        aspect: 1,
-    })
-    const [imageRef, setImageRef] = useState<HTMLImageElement | null>(null)
-    const [croppedImageUrl, setCroppedImageUrl] = useState<string>('')
-    const [croppedBlob, setCroppedBlob] = useState<Blob>(null)
     const [modalIsOpen, setModalIsOpen] = useState<boolean>(false)
 
     React.useEffect(() => {
@@ -96,89 +65,6 @@ const Settings = (): React.ReactElement => {
             })
             reader.readAsDataURL(e.target.files[0])
         }
-    }
-    const onImageLoaded = (image: HTMLImageElement) => {
-        setImageRef(image)
-    }
-    const onCropChange = (crop: Crop) => {
-        setCrop(crop)
-    }
-    const onCropComplete = async (crop: any) => {
-        if (imageRef && crop.width && crop.height) {
-            const canvas = document.createElement('canvas')
-            const scaleX = imageRef.naturalWidth / imageRef.width
-            const scaleY = imageRef.naturalHeight / imageRef.height
-            canvas.width = crop.width
-            canvas.height = crop.height
-            const ctx = canvas.getContext('2d')
-            if (ctx !== null) {
-                ctx.drawImage(
-                    imageRef,
-                    crop.x * scaleX,
-                    crop.y * scaleY,
-                    crop.width * scaleX,
-                    crop.height * scaleY,
-                    0,
-                    0,
-                    crop.width,
-                    crop.height
-                )
-            }
-            canvas.toBlob(
-                async (blob) => {
-                    window.URL.revokeObjectURL(croppedImageUrl)
-                    setCroppedImageUrl(window.URL.createObjectURL(blob))
-                    setCroppedBlob(blob)
-                },
-                'image/jpeg',
-                0.95
-            )
-        }
-    }
-    const onUploadAvatar = (): void => {
-        try {
-            fbStorage
-                .ref()
-                .child(
-                    'images/' +
-                        formatDateTime(new Date()) +
-                        signinAccount.userId
-                )
-                .put(croppedBlob)
-                .then((snapshot) => {
-                    snapshot.ref
-                        .getDownloadURL()
-                        .then(async (avatarURL: string) => {
-                            await updateAccountAvatarOnFbDB(avatarURL)
-                            await updatePhotoURLOnFbAuth(avatarURL)
-                            setModalIsOpen(false)
-                            // TODO: DOMの更新をかけてアバターを変更する方法を探る
-                            location.href = '/settings'
-                        })
-                })
-        } catch (error) {
-            console.log(error)
-        }
-    }
-    const updateAccountAvatarOnFbDB = (avatarURL: string) => {
-        fbDb.collection('users')
-            .doc(fbAuth.currentUser.uid)
-            .set(
-                {
-                    avatarURL,
-                },
-                {
-                    merge: true,
-                }
-            )
-            .catch((error) => {
-                console.log(error)
-            })
-    }
-    const updatePhotoURLOnFbAuth = (avatarURL: string) => {
-        fbAuth.currentUser.updateProfile({
-            photoURL: avatarURL,
-        })
     }
 
     const onUpdateAccountOnFbDB = async (): Promise<void> => {
@@ -228,42 +114,11 @@ const Settings = (): React.ReactElement => {
                                 onChange={onSelectFile}
                             />
                         </div>
-                        {src && (
-                            <Modal
-                                isOpen={modalIsOpen}
-                                style={modalStyle}
-                                onRequestClose={() => setModalIsOpen(false)}
-                                ariaHideApp={false}
-                            >
-                                <ReactCrop
-                                    src={src}
-                                    crop={crop}
-                                    onImageLoaded={onImageLoaded}
-                                    onComplete={onCropComplete}
-                                    onChange={onCropChange}
-                                    ruleOfThirds
-                                />
-                                <div>
-                                    <Button
-                                        variant="contained"
-                                        onClick={() => {
-                                            setModalIsOpen(false)
-                                        }}
-                                    >
-                                        キャンセル
-                                    </Button>
-                                    {croppedImageUrl && (
-                                        <Button
-                                            variant="contained"
-                                            color="primary"
-                                            onClick={onUploadAvatar}
-                                        >
-                                            OK
-                                        </Button>
-                                    )}
-                                </div>
-                            </Modal>
-                        )}
+                        <AvatalTrimmingModal
+                            modalIsOpen={modalIsOpen}
+                            onRequestClose={() => setModalIsOpen(false)}
+                            src={src}
+                        />
                         <form className={classes.form} noValidate>
                             <Grid container spacing={2}>
                                 <Grid item xs={12}>
