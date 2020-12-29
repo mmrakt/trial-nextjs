@@ -13,6 +13,8 @@ import {
 import { fbAuth, fbDb } from '../../../functions/firebase'
 import { useRouter } from 'next/router'
 import { AuthContext, checkUnAuthenticated } from '../../auth/AuthProvider'
+import { useForm } from 'react-hook-form'
+import { ErrorMessage } from '@hookform/error-message'
 
 const useStyles = makeStyles((theme) => ({
     paper: {
@@ -39,30 +41,41 @@ const Signup = (): React.ReactElement => {
     const { signinAccount } = React.useContext(AuthContext)
     checkUnAuthenticated()
     const classes = useStyles()
+
     const [userId, setUserId] = useState('')
     const [userName, setUserName] = useState('')
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
-    const [confirmPassword, setConfirmPassword] = useState('')
+    const [loading, setLoading] = useState<boolean>(true)
 
-    const signup = async (): Promise<void> => {
-        React.useEffect(() => {
-            signinAccount && router.push('/signin')
-        })
-        if (email && password) {
-            await fbAuth
-                .createUserWithEmailAndPassword(email, password)
-                .then((result) => {
-                    result.user.updateProfile({
-                        displayName: userName,
+    const { register, handleSubmit, errors } = useForm({
+        mode: 'onChange',
+    })
+    const onSubmit = (data) => console.log(data)
+
+    const onSignup = async (): Promise<void> => {
+        setLoading(false)
+        if (email && password && loading) {
+            try {
+                await fbAuth
+                    .createUserWithEmailAndPassword(email, password)
+                    .then((result) => {
+                        result.user.updateProfile({
+                            displayName: userName,
+                        })
                     })
+
+                fbDb.collection('users').doc(fbAuth.currentUser.uid).set({
+                    userId: userId,
+                    userName: userName,
+                    email: email,
                 })
-            fbDb.collection('users').doc(fbAuth.currentUser.uid).set({
-                userId: userId,
-                userName: userName,
-                email: email,
-            })
-            router.push(`/{$fbAuth.currentUser.uid}`)
+                router.push(`/{$fbAuth.currentUser.uid}`)
+            } catch (error) {
+                console.log(error)
+            } finally {
+                setLoading(true)
+            }
         }
     }
 
@@ -72,7 +85,10 @@ const Signup = (): React.ReactElement => {
                 <CssBaseline />
                 <div className={classes.paper}>
                     <Avatar className={classes.avatar}></Avatar>
-                    <form className={classes.form} noValidate>
+                    <form
+                        className={classes.form}
+                        onSubmit={handleSubmit(onSubmit)}
+                    >
                         <Grid container spacing={2}>
                             <Grid item xs={12}>
                                 <TextField
@@ -83,12 +99,26 @@ const Signup = (): React.ReactElement => {
                                     label="ユーザーID"
                                     name="userId"
                                     autoComplete="userId"
+                                    className={errors.title && 'error'}
                                     onChange={(
                                         e: React.ChangeEvent<HTMLInputElement>
                                     ) => {
                                         setUserId(e.target.value)
                                     }}
+                                    inputRef={register({
+                                        required: {
+                                            value: true,
+                                            message: '必須項目です。',
+                                        },
+                                        pattern: {
+                                            value: /^[0-9a-zA-Z]*$/,
+                                            message:
+                                                '半角英数字のみ使用可能です。',
+                                        },
+                                    })}
+                                    error={Boolean(errors.userId)}
                                 />
+                                <ErrorMessage errors={errors} name="userId" />
                             </Grid>
                             <Grid item xs={12}>
                                 <TextField
@@ -97,14 +127,22 @@ const Signup = (): React.ReactElement => {
                                     fullWidth
                                     id="userName"
                                     label="ユーザー名"
-                                    name="diplayName"
+                                    name="userName"
                                     autoComplete="userName"
                                     onChange={(
                                         e: React.ChangeEvent<HTMLInputElement>
                                     ) => {
                                         setUserName(e.target.value)
                                     }}
+                                    inputRef={register({
+                                        required: {
+                                            value: true,
+                                            message: '必須項目です。',
+                                        },
+                                    })}
+                                    error={Boolean(errors.userName)}
                                 />
+                                <ErrorMessage errors={errors} name="userName" />
                             </Grid>
                             <Grid item xs={12}>
                                 <TextField
@@ -120,7 +158,20 @@ const Signup = (): React.ReactElement => {
                                     ) => {
                                         setEmail(e.target.value)
                                     }}
+                                    inputRef={register({
+                                        required: {
+                                            value: true,
+                                            message: '必須項目です。',
+                                        },
+                                        pattern: {
+                                            value: /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/,
+                                            message:
+                                                'メールアドレスの形式が正しくありません。',
+                                        },
+                                    })}
+                                    error={Boolean(errors.email)}
                                 />
+                                <ErrorMessage errors={errors} name="email" />
                             </Grid>
                             <Grid item xs={12}>
                                 <TextField
@@ -137,23 +188,45 @@ const Signup = (): React.ReactElement => {
                                     ) => {
                                         setPassword(e.target.value)
                                     }}
+                                    inputRef={register({
+                                        required: {
+                                            value: true,
+                                            message: '必須項目です。',
+                                        },
+                                        pattern: {
+                                            value: /^[0-9a-zA-Z]*$/,
+                                            message:
+                                                '半角英数字のみ使用可能です。',
+                                        },
+                                    })}
+                                    error={Boolean(errors.password)}
                                 />
+                                <ErrorMessage errors={errors} name="password" />
                             </Grid>
                             <Grid item xs={12}>
                                 <TextField
                                     variant="outlined"
                                     required
                                     fullWidth
-                                    name="passwordConfirm"
+                                    name="confirmPassword"
                                     label="パスワード確認"
                                     type="password"
-                                    id="password"
+                                    id="confirmPassword"
                                     autoComplete="current-password"
-                                    onChange={(
-                                        e: React.ChangeEvent<HTMLInputElement>
-                                    ) => {
-                                        setConfirmPassword(e.target.value)
-                                    }}
+                                    inputRef={register({
+                                        required: {
+                                            value: true,
+                                            message: '必須項目です。',
+                                        },
+                                        validate: (value) =>
+                                            value === password ||
+                                            '確認用パスワードが一致しません。',
+                                    })}
+                                    error={Boolean(errors.confirmPassword)}
+                                />
+                                <ErrorMessage
+                                    errors={errors}
+                                    name="confirmPassword"
                                 />
                             </Grid>
                         </Grid>
@@ -162,7 +235,7 @@ const Signup = (): React.ReactElement => {
                             variant="contained"
                             color="primary"
                             className={classes.submit}
-                            onClick={signup}
+                            onClick={onSignup}
                         >
                             登録
                         </Button>

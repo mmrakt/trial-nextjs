@@ -35,14 +35,16 @@ const AuthProvider = (props: IProps): React.ReactElement => {
                     .doc(user.uid)
                     .get()
                     .then((doc) => {
-                        setSigninAccount(doc.data())
-                        localStorage.setItem(
-                            'signinAccount',
-                            JSON.stringify({
-                                userName: doc.data().userName,
-                                profile: doc.data().profile,
-                            })
-                        )
+                        if (doc.data()) {
+                            setSigninAccount(doc.data())
+                            localStorage.setItem(
+                                'signinAccount',
+                                JSON.stringify({
+                                    userName: doc.data().userName,
+                                    profile: doc.data().profile,
+                                })
+                            )
+                        }
                     })
                     .then(() => {
                         console.log('succuess!')
