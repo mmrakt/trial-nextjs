@@ -12,7 +12,7 @@ import {
 } from '@material-ui/core'
 import { fbAuth, fbDb } from '../../../functions/firebase'
 import { useRouter } from 'next/router'
-import { AuthContext } from '../../auth/AuthProvider'
+import { AuthContext, checkUnAuthenticated } from '../../auth/AuthProvider'
 
 const useStyles = makeStyles((theme) => ({
     paper: {
@@ -35,14 +35,15 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 const Signup = (): React.ReactElement => {
+    const router = useRouter()
+    const { signinAccount } = React.useContext(AuthContext)
+    checkUnAuthenticated()
     const classes = useStyles()
     const [userId, setUserId] = useState('')
     const [userName, setUserName] = useState('')
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const [confirmPassword, setConfirmPassword] = useState('')
-    const router = useRouter()
-    const { signinAccount } = React.useContext(AuthContext)
 
     const signup = async (): Promise<void> => {
         React.useEffect(() => {

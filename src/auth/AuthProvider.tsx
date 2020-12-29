@@ -1,5 +1,6 @@
 import React from 'react'
 import { fbAuth, fbDb } from '../../functions/firebase'
+import { useRouter } from 'next/router'
 
 interface IAuthContext {
     signinAccount:
@@ -61,4 +62,21 @@ const AuthProvider = (props: IProps): React.ReactElement => {
         </AuthContext.Provider>
     )
 }
-export { AuthContext, AuthProvider }
+
+const checkAuthenticated = (): void => {
+    if (typeof window !== 'undefined') {
+        if (!fbAuth.currentUser) {
+            useRouter().push('/signin')
+        }
+    }
+}
+
+const checkUnAuthenticated = (): void => {
+    if (typeof window !== 'undefined') {
+        if (fbAuth.currentUser) {
+            useRouter().push('/')
+        }
+    }
+}
+
+export { AuthContext, AuthProvider, checkAuthenticated, checkUnAuthenticated }

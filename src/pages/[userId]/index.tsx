@@ -1,7 +1,7 @@
 import React from 'react'
 import {} from '@material-ui/core'
 import Layout from '../../components/layout'
-import { AuthContext } from '../../auth/AuthProvider'
+import { AuthContext, checkAuthenticated } from '../../auth/AuthProvider'
 import Typography from '@material-ui/core/Typography'
 import styled from 'styled-components'
 import Link from 'next/link'
@@ -21,6 +21,7 @@ const FlexContainer = styled.div`
 `
 
 const Mypage = (): React.ReactElement => {
+    checkAuthenticated()
     const { signinAccount } = React.useContext(AuthContext)
     return (
         <Layout title="マイページ">

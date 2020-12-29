@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import {} from '@material-ui/core'
 import Layout from '../../components/layout'
-import { AuthContext } from '../../auth/AuthProvider'
+import { AuthContext, checkAuthenticated } from '../../auth/AuthProvider'
 import {
     Button,
     CssBaseline,
@@ -37,6 +37,7 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 const Settings = (): React.ReactElement => {
+    checkAuthenticated()
     const classes = useStyles()
     const { signinAccount } = React.useContext(AuthContext)
     const [editedUserName, setEditedUserName] = useState('')
