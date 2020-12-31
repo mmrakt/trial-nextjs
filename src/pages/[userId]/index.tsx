@@ -21,36 +21,47 @@ const FlexContainer = styled.div`
 `
 
 const Mypage = (): React.ReactElement => {
-    checkAuthenticated()
     const { signinAccount } = React.useContext(AuthContext)
+    checkAuthenticated()
     return (
         <Layout title="マイページ">
             {signinAccount && (
-                <FlexContainer>
-                    <p className="flexItem">
-                        {signinAccount.avatarURL ? (
-                            <AvatarImg src={signinAccount.avatarURL} />
-                        ) : (
-                            <AvatarImg src="/profile.png" />
-                        )}
-                    </p>
-                    <div className="flexItem">
-                        <Typography variant="h5" component="h2">
-                            {signinAccount.userName}
-                        </Typography>
-                        <Typography gutterBottom variant="body2" component="p">
-                            @{signinAccount.userId}
-                        </Typography>
-                        <Typography variant="body2" component="p">
-                            {signinAccount.profile}
-                        </Typography>
+                <div>
+                    <FlexContainer>
+                        <p className="flexItem">
+                            {signinAccount.avatarURL ? (
+                                <AvatarImg src={signinAccount.avatarURL} />
+                            ) : (
+                                <AvatarImg src="/profile.png" />
+                            )}
+                        </p>
+                        <div className="flexItem">
+                            <Typography variant="h5" component="h2">
+                                {signinAccount.userName}
+                            </Typography>
+                            <Typography
+                                gutterBottom
+                                variant="body2"
+                                component="p"
+                            >
+                                @{signinAccount.userId}
+                            </Typography>
+                            <Typography variant="body2" component="p">
+                                {signinAccount.profile}
+                            </Typography>
+                        </div>
+                        <div className="flexItem">
+                            <button>
+                                <Link href="/settings">設定</Link>
+                            </button>
+                        </div>
+                    </FlexContainer>
+                    <div>
+                        <Link href="/account/delete">
+                            <a>アカウントの削除はこちら</a>
+                        </Link>
                     </div>
-                    <div className="flexItem">
-                        <button>
-                            <Link href="/settings">設定</Link>
-                        </button>
-                    </div>
-                </FlexContainer>
+                </div>
             )}
         </Layout>
     )
