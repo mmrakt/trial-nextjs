@@ -56,11 +56,18 @@ const Mypage = (): React.ReactElement => {
                             </button>
                         </div>
                     </FlexContainer>
-                    <div>
-                        <Link href="/account/delete">
-                            <a>アカウントの削除はこちら</a>
-                        </Link>
-                    </div>
+                    <ul>
+                        <li>
+                            <Link href="/account/reset_email">
+                                <a>メールアドレスの変更はこちら</a>
+                            </Link>
+                        </li>
+                        <li>
+                            <Link href="/account/delete">
+                                <a>アカウントの削除はこちら</a>
+                            </Link>
+                        </li>
+                    </ul>
                 </div>
             )}
         </Layout>

@@ -1,7 +1,7 @@
 import React from 'react'
 import { Button } from '@material-ui/core'
-import Layout from '../../components/layout'
-import { AuthContext, checkAuthenticated } from '../../auth/AuthProvider'
+import Layout from '../../../components/layout'
+import { AuthContext, checkAuthenticated } from '../../../auth/AuthProvider'
 import styled from 'styled-components'
 import { fbAuth, fbDb } from 'functions/firebase'
 
