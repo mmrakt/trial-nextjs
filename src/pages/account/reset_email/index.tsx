@@ -1,8 +1,7 @@
 import React, { useState } from 'react'
 import Layout from '../../../components/layout'
 import { AuthContext, checkAuthenticated } from '../../../auth/AuthProvider'
-import styled from 'styled-components'
-import { fbAuth, fbDb } from 'functions/firebase'
+import { firebase, fbAuth, fbDb } from 'functions/firebase'
 import {
     Button,
     CssBaseline,
@@ -26,29 +25,61 @@ const ResetEmail = (): React.ReactElement => {
     const classes = useStyles()
     const { signinAccount } = React.useContext(AuthContext)
     //checkAuthenticated()
+    const [oldEmail, setOldEmail] = useState<string>('')
     const [newEmail, setNewEmail] = useState<string>('')
+    const [password, setPassword] = useState<string>('')
+    const [, setLoading] = useState<boolean>(false)
 
     const onResetEmail = async (): Promise<void> => {
         try {
-            //const credential = fbAuth.EmailAuthProvider.credential(currentUser.email, currentUser.password)
-            await fbAuth.currentUser.updateEmail(newEmail)
+            setLoading(true)
+            await reauthenticateWithCredential()
+            await updateAccountEmailOnFbDB()
             fbAuth.currentUser.sendEmailVerification()
-            updateAccountEmailOnFbDB()
-            setNewEmail('')
-            location.href = '/account/reset_email_complete'
+            setTimeout(() => {
+                location.href = '/account/reset_email_complete'
+            }, 2000)
         } catch (error) {
             console.log(error)
+        } finally {
+            setLoading(false)
         }
     }
-    const updateAccountEmailOnFbDB = () => {
-        fbDb.collection('users').doc(fbAuth.currentUser.uid).set(
-            {
-                email: newEmail,
-            },
-            {
-                merge: true,
-            }
-        )
+
+    const reauthenticateWithCredential = async (): Promise<void> => {
+        fbAuth.currentUser
+            .reauthenticateWithCredential(fetchCredential())
+            .then(() => {
+                console.log('再認証成功！')
+                fbAuth.currentUser.updateEmail(newEmail)
+            })
+            .catch((error) => {
+                console.log(error)
+            })
+            .finally(() => {
+                fbAuth.currentUser.getIdToken(true)
+            })
+    }
+    const fetchCredential = () => {
+        return firebase.auth.EmailAuthProvider.credential(oldEmail, password)
+    }
+    const updateAccountEmailOnFbDB = async (): Promise<void> => {
+        fbDb.collection('users')
+            .doc(fbAuth.currentUser.uid)
+            .set(
+                {
+                    email: newEmail,
+                },
+                {
+                    merge: true,
+                }
+            )
+            .then(() => {
+                console.log('メールアドレス変更完了')
+            })
+            .catch((error) => {
+                console.log(error)
+            })
     }
 
     return (
@@ -56,32 +87,62 @@ const ResetEmail = (): React.ReactElement => {
             {signinAccount && (
                 <Container component="main" maxWidth="xs">
                     <CssBaseline />
-                    <form className={classes.form} noValidate>
-                        <Grid container spacing={2}>
-                            <Grid item xs={12}>
-                                <TextField
-                                    required
-                                    fullWidth
-                                    id="newEmail"
-                                    label="メールアドレス"
-                                    name="newEmail"
-                                    onChange={(
-                                        e: React.ChangeEvent<HTMLInputElement>
-                                    ) => {
-                                        setNewEmail(e.target.value)
-                                    }}
-                                />
-                            </Grid>
+                    <Grid container spacing={2}>
+                        <Grid item xs={12}>
+                            <TextField
+                                required
+                                fullWidth
+                                id="oldEmail"
+                                label="現在のメールアドレス"
+                                name="oldEmail"
+                                onChange={(
+                                    e: React.ChangeEvent<HTMLInputElement>
+                                ) => {
+                                    setOldEmail(e.target.value)
+                                }}
+                            />
                         </Grid>
-                        <Button
-                            variant="contained"
-                            color="primary"
-                            className={classes.submit}
-                            onClick={onResetEmail}
-                        >
-                            送信する
-                        </Button>
-                    </form>
+                        <Grid item xs={12}>
+                            <TextField
+                                required
+                                fullWidth
+                                id="newEmail"
+                                label="新しいメールアドレス"
+                                name="newEmail"
+                                onChange={(
+                                    e: React.ChangeEvent<HTMLInputElement>
+                                ) => {
+                                    setNewEmail(e.target.value)
+                                }}
+                            />
+                        </Grid>
+                        <p>
+                            ※ご指定のメールアドレスに本人確認用メールを送信します。
+                        </p>
+                        <Grid item xs={12}>
+                            <TextField
+                                required
+                                fullWidth
+                                id="password"
+                                label="パスワード"
+                                name="password"
+                                type="password"
+                                onChange={(
+                                    e: React.ChangeEvent<HTMLInputElement>
+                                ) => {
+                                    setPassword(e.target.value)
+                                }}
+                            />
+                        </Grid>
+                    </Grid>
+                    <Button
+                        variant="contained"
+                        color="primary"
+                        className={classes.submit}
+                        onClick={onResetEmail}
+                    >
+                        変更する
+                    </Button>
                 </Container>
             )}
         </Layout>
