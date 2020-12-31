@@ -15,6 +15,7 @@ import { useRouter } from 'next/router'
 import { AuthContext, checkUnAuthenticated } from '../../auth/AuthProvider'
 import { useForm } from 'react-hook-form'
 import { ErrorMessage } from '@hookform/error-message'
+import { vldRules } from '../../utils/validationRule'
 
 const useStyles = makeStyles((theme) => ({
     paper: {
@@ -45,20 +46,21 @@ const Signup = (): React.ReactElement => {
     const [userId, setUserId] = useState('')
     const [userName, setUserName] = useState('')
     const [email, setEmail] = useState('')
-    const [password, setPassword] = useState('')
+    const [orgPassword, setOrgPassword] = useState('')
     const [loading, setLoading] = useState<boolean>(true)
 
     const { register, handleSubmit, errors } = useForm({
         mode: 'onChange',
+        criteriaMode: 'all',
     })
     const onSubmit = (data) => console.log(data)
 
     const onSignup = async (): Promise<void> => {
         setLoading(false)
-        if (email && password && loading) {
+        if (email && orgPassword && loading) {
             try {
                 await fbAuth
-                    .createUserWithEmailAndPassword(email, password)
+                    .createUserWithEmailAndPassword(email, orgPassword)
                     .then((result) => {
                         result.user.updateProfile({
                             displayName: userName,
@@ -99,22 +101,14 @@ const Signup = (): React.ReactElement => {
                                     label="ユーザーID"
                                     name="userId"
                                     autoComplete="userId"
-                                    className={errors.title && 'error'}
                                     onChange={(
                                         e: React.ChangeEvent<HTMLInputElement>
                                     ) => {
                                         setUserId(e.target.value)
                                     }}
                                     inputRef={register({
-                                        required: {
-                                            value: true,
-                                            message: '必須項目です。',
-                                        },
-                                        pattern: {
-                                            value: /^[0-9a-zA-Z]*$/,
-                                            message:
-                                                '半角英数字のみ使用可能です。',
-                                        },
+                                        required: vldRules.required,
+                                        pattern: vldRules.checkAlphanumeric,
                                     })}
                                     error={Boolean(errors.userId)}
                                 />
@@ -159,15 +153,8 @@ const Signup = (): React.ReactElement => {
                                         setEmail(e.target.value)
                                     }}
                                     inputRef={register({
-                                        required: {
-                                            value: true,
-                                            message: '必須項目です。',
-                                        },
-                                        pattern: {
-                                            value: /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/,
-                                            message:
-                                                'メールアドレスの形式が正しくありません。',
-                                        },
+                                        required: vldRules.required,
+                                        pattern: vldRules.checkEmail,
                                     })}
                                     error={Boolean(errors.email)}
                                 />
@@ -178,30 +165,35 @@ const Signup = (): React.ReactElement => {
                                     variant="outlined"
                                     required
                                     fullWidth
-                                    name="password"
+                                    name="orgPassword"
                                     label="パスワード"
                                     type="password"
-                                    id="password"
+                                    id="orgPassword"
                                     autoComplete="current-password"
                                     onChange={(
                                         e: React.ChangeEvent<HTMLInputElement>
                                     ) => {
-                                        setPassword(e.target.value)
+                                        setOrgPassword(e.target.value)
                                     }}
                                     inputRef={register({
-                                        required: {
-                                            value: true,
-                                            message: '必須項目です。',
-                                        },
-                                        pattern: {
-                                            value: /^[0-9a-zA-Z]*$/,
-                                            message:
-                                                '半角英数字のみ使用可能です。',
-                                        },
+                                        required: vldRules.required,
+                                        minLength: vldRules.checkMinLength,
+                                        pattern: vldRules.checkAlphanumeric,
                                     })}
-                                    error={Boolean(errors.password)}
+                                    error={Boolean(errors.orgPassword)}
                                 />
-                                <ErrorMessage errors={errors} name="password" />
+                                <ErrorMessage
+                                    errors={errors}
+                                    name="orgPassword"
+                                    render={({ messages }) =>
+                                        messages &&
+                                        Object.entries(
+                                            messages
+                                        ).map(([type, message]) => (
+                                            <p key={type}>{message}</p>
+                                        ))
+                                    }
+                                />
                             </Grid>
                             <Grid item xs={12}>
                                 <TextField
@@ -214,12 +206,9 @@ const Signup = (): React.ReactElement => {
                                     id="confirmPassword"
                                     autoComplete="current-password"
                                     inputRef={register({
-                                        required: {
-                                            value: true,
-                                            message: '必須項目です。',
-                                        },
+                                        required: vldRules.required,
                                         validate: (value) =>
-                                            value === password ||
+                                            orgPassword === value ||
                                             '確認用パスワードが一致しません。',
                                     })}
                                     error={Boolean(errors.confirmPassword)}
