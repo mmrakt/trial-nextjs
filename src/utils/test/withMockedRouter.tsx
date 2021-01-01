@@ -3,7 +3,8 @@ import { RouterContext } from 'next/dist/next-server/lib/router-context'
 import { MockedProvider } from '@apollo/client/testing'
 
 export function withMockedRouter(
-    router, children: React.ReactElement
+    router,
+    children: React.ReactElement
 ): React.ReactElement {
     const mockedRouter = {
         basePath: '',
@@ -23,14 +24,12 @@ export function withMockedRouter(
             emit: jest.fn(),
         },
         isFallback: false,
-        ...router
+        ...router,
     }
 
     return (
         <RouterContext.Provider value={mockedRouter}>
-             <MockedProvider addTypename={false}>
-                 {children}
-             </MockedProvider>
+            <MockedProvider addTypename={false}>{children}</MockedProvider>
         </RouterContext.Provider>
     )
 }
