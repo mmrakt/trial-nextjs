@@ -4,7 +4,6 @@ import {
     Avatar,
     Button,
     CssBaseline,
-    TextField,
     Link,
     Grid,
     makeStyles,
@@ -14,8 +13,8 @@ import { fbAuth, fbDb } from '../../../functions/firebase'
 import { useRouter } from 'next/router'
 import { AuthContext, checkUnAuthenticated } from '../../auth/AuthProvider'
 import { useForm } from 'react-hook-form'
-import { ErrorMessage } from '@hookform/error-message'
 import { vldRules } from '../../utils/validationRule'
+import TextFieldEl from '../../components/grid/textFieldEl'
 
 const useStyles = makeStyles((theme) => ({
     paper: {
@@ -92,132 +91,101 @@ const Signup = (): React.ReactElement => {
                         onSubmit={handleSubmit(onSubmit)}
                     >
                         <Grid container spacing={2}>
-                            <Grid item xs={12}>
-                                <TextField
-                                    variant="outlined"
-                                    required
-                                    fullWidth
-                                    id="userId"
-                                    label="ユーザーID"
-                                    name="userId"
-                                    autoComplete="userId"
-                                    onChange={(
-                                        e: React.ChangeEvent<HTMLInputElement>
-                                    ) => {
-                                        setUserId(e.target.value)
-                                    }}
-                                    inputRef={register({
-                                        required: vldRules.required,
-                                        pattern: vldRules.checkAlphanumeric,
-                                    })}
-                                    error={Boolean(errors.userId)}
-                                />
-                                <ErrorMessage errors={errors} name="userId" />
-                            </Grid>
-                            <Grid item xs={12}>
-                                <TextField
-                                    variant="outlined"
-                                    required
-                                    fullWidth
-                                    id="userName"
-                                    label="ユーザー名"
-                                    name="userName"
-                                    autoComplete="userName"
-                                    onChange={(
-                                        e: React.ChangeEvent<HTMLInputElement>
-                                    ) => {
-                                        setUserName(e.target.value)
-                                    }}
-                                    inputRef={register({
-                                        required: {
-                                            value: true,
-                                            message: '必須項目です。',
-                                        },
-                                    })}
-                                    error={Boolean(errors.userName)}
-                                />
-                                <ErrorMessage errors={errors} name="userName" />
-                            </Grid>
-                            <Grid item xs={12}>
-                                <TextField
-                                    variant="outlined"
-                                    required
-                                    fullWidth
-                                    id="email"
-                                    label="Eメールアドレス"
-                                    name="email"
-                                    autoComplete="email"
-                                    onChange={(
-                                        e: React.ChangeEvent<HTMLInputElement>
-                                    ) => {
-                                        setEmail(e.target.value)
-                                    }}
-                                    inputRef={register({
-                                        required: vldRules.required,
-                                        pattern: vldRules.checkEmail,
-                                    })}
-                                    error={Boolean(errors.email)}
-                                />
-                                <ErrorMessage errors={errors} name="email" />
-                            </Grid>
-                            <Grid item xs={12}>
-                                <TextField
-                                    variant="outlined"
-                                    required
-                                    fullWidth
-                                    name="orgPassword"
-                                    label="パスワード"
-                                    type="password"
-                                    id="orgPassword"
-                                    autoComplete="current-password"
-                                    onChange={(
-                                        e: React.ChangeEvent<HTMLInputElement>
-                                    ) => {
-                                        setOrgPassword(e.target.value)
-                                    }}
-                                    inputRef={register({
-                                        required: vldRules.required,
-                                        minLength: vldRules.checkMinLength,
-                                        pattern: vldRules.checkAlphanumeric,
-                                    })}
-                                    error={Boolean(errors.orgPassword)}
-                                />
-                                <ErrorMessage
-                                    errors={errors}
-                                    name="orgPassword"
-                                    render={({ messages }) =>
-                                        messages &&
-                                        Object.entries(
-                                            messages
-                                        ).map(([type, message]) => (
-                                            <p key={type}>{message}</p>
-                                        ))
-                                    }
-                                />
-                            </Grid>
-                            <Grid item xs={12}>
-                                <TextField
-                                    variant="outlined"
-                                    required
-                                    fullWidth
-                                    name="confirmPassword"
-                                    label="パスワード確認"
-                                    type="password"
-                                    id="confirmPassword"
-                                    autoComplete="current-password"
-                                    inputRef={register({
-                                        required: vldRules.required,
-                                        validate: (value) =>
-                                            orgPassword === value ||
-                                            '確認用パスワードが一致しません。',
-                                    })}
-                                    error={Boolean(errors.confirmPassword)}
-                                />
-                                <ErrorMessage
-                                    errors={errors}
-                                    name="confirmPassword"
-                                />
-                            </Grid>
+                            <TextFieldEl
+                                id="userId"
+                                label="ユーザーID"
+                                name="userId"
+                                autoComplete="userId"
+                                type="text"
+                                onChange={(
+                                    e: React.ChangeEvent<HTMLInputElement>
+                                ) => {
+                                    setUserId(e.target.value)
+                                }}
+                                inputRef={register({
+                                    required: vldRules.required,
+                                    pattern: vldRules.checkAlphanumeric,
+                                })}
+                                error={Boolean(errors.userId)}
+                                errors={errors}
+                            />
+                            <TextFieldEl
+                                id="userName"
+                                label="ユーザー名"
+                                name="userName"
+                                autoComplete="userName"
+                                type="text"
+                                onChange={(
+                                    e: React.ChangeEvent<HTMLInputElement>
+                                ) => {
+                                    setUserName(e.target.value)
+                                }}
+                                inputRef={register({
+                                    required: vldRules.required,
+                                })}
+                                error={Boolean(errors.userName)}
+                                errors={errors}
+                            />
+                            <TextFieldEl
+                                id="email"
+                                label="Eメールアドレス"
+                                name="email"
+                                autoComplete="email"
+                                type="text"
+                                onChange={(
+                                    e: React.ChangeEvent<HTMLInputElement>
+                                ) => {
+                                    setEmail(e.target.value)
+                                }}
+                                inputRef={register({
+                                    required: vldRules.required,
+                                    pattern: vldRules.checkEmail,
+                                })}
+                                error={Boolean(errors.email)}
+                                errors={errors}
+                            />
+                            <TextFieldEl
+                                name="orgPassword"
+                                label="パスワード"
+                                type="password"
+                                id="orgPassword"
+                                autoComplete="current-password"
+                                onChange={(
+                                    e: React.ChangeEvent<HTMLInputElement>
+                                ) => {
+                                    setOrgPassword(e.target.value)
+                                }}
+                                inputRef={register({
+                                    required: vldRules.required,
+                                    minLength: vldRules.checkMinLength,
+                                    pattern: vldRules.checkAlphanumeric,
+                                })}
+                                error={Boolean(errors.orgPassword)}
+                                errors={errors}
+                                render={({ messages }) =>
+                                    messages &&
+                                    Object.entries(
+                                        messages
+                                    ).map(([type, message]) => (
+                                        <p key={type}>{message}</p>
+                                    ))
+                                }
+                            />
+                            <TextFieldEl
+                                name="confirmPassword"
+                                label="パスワード確認"
+                                type="password"
+                                id="confirmPassword"
+                                autoComplete="current-password"
+                                inputRef={register({
+                                    required: vldRules.required,
+                                    validate: (value) =>
+                                        orgPassword === value ||
+                                        '確認用パスワードが一致しません。',
+                                })}
+                                error={Boolean(errors.confirmPassword)}
+                                errors={errors}
+                            />
                         </Grid>
                         <Button
                             fullWidth

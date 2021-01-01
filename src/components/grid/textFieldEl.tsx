@@ -8,10 +8,11 @@ type IProps = {
     id: string
     autoComplete: string
     type: string
-    onChange: (e: React.ChangeEvent<HTMLInputElement>) => void
+    onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void
     inputRef: (ref: any) => void
     error: boolean
     errors: any
+    render?: (data: { message: string; messages?: any }) => React.ReactNode
 }
 const TextFieldEl = (props: IProps): React.ReactElement => {
     const {
@@ -24,6 +25,7 @@ const TextFieldEl = (props: IProps): React.ReactElement => {
         inputRef,
         error,
         errors,
+        render,
     } = props
     return (
         <Grid item xs={12}>
@@ -40,7 +42,7 @@ const TextFieldEl = (props: IProps): React.ReactElement => {
                 inputRef={inputRef}
                 error={error}
             />
-            <ErrorMessage errors={errors} name={name} />
+            <ErrorMessage errors={errors} name={name} render={render} />
         </Grid>
     )
 }
