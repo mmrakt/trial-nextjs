@@ -15,4 +15,12 @@ export namespace vldRules {
         value: 8,
         message: '8文字以上で設定してください。',
     }
+    export const checkMaxLength20 = {
+        value: 20,
+        message: '20文字以内で設定してください。',
+    }
+    export const checkMaxLength100 = {
+        value: 100,
+        message: '20文字以内で設定してください。',
+    }
 }

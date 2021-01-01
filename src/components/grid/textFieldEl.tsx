@@ -8,10 +8,13 @@ type IProps = {
     id: string
     autoComplete: string
     type: string
+    value?: string
+    multiline?: boolean
+    rows?: number
     onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void
-    inputRef: (ref: any) => void
-    error: boolean
-    errors: any
+    inputRef?: (ref: any) => void
+    error?: boolean
+    errors?: any
     render?: (data: { message: string; messages?: any }) => React.ReactNode
 }
 const TextFieldEl = (props: IProps): React.ReactElement => {
@@ -21,6 +24,9 @@ const TextFieldEl = (props: IProps): React.ReactElement => {
         id,
         autoComplete,
         type,
+        value,
+        multiline,
+        rows,
         onChange,
         inputRef,
         error,
@@ -37,6 +43,9 @@ const TextFieldEl = (props: IProps): React.ReactElement => {
                 label={label}
                 name={name}
                 type={type}
+                value={value}
+                multiline={multiline}
+                rows={rows}
                 autoComplete={autoComplete}
                 onChange={onChange}
                 inputRef={inputRef}

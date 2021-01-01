@@ -5,7 +5,6 @@ import { AuthContext, checkAuthenticated } from '../../auth/AuthProvider'
 import {
     Button,
     CssBaseline,
-    TextField,
     Grid,
     makeStyles,
     Container,
@@ -14,6 +13,9 @@ import { fbDb, fbAuth } from '../../../functions/firebase'
 import 'react-image-crop/dist/ReactCrop.css'
 import AvatalTrimmingModal from './AvatarTrimmingModal'
 import styled from 'styled-components'
+import { useForm } from 'react-hook-form'
+import TextFieldEl from '../../components/grid/textFieldEl'
+import { vldRules } from '@/utils/validationRule'
 
 const AvatarImg = styled.img`
     border-radius: 50%;
@@ -44,6 +46,10 @@ const Settings = (): React.ReactElement => {
     const [editedProfile, setEditedProfile] = useState('')
     const [src, setSrc] = useState<any>(null)
     const [modalIsOpen, setModalIsOpen] = useState<boolean>(false)
+    const { register, errors } = useForm({
+        criteriaMode: 'all',
+        mode: 'onChange',
+    })
 
     React.useEffect(() => {
         //NOTE: https://stackoverflow.com/questions/52474208/react-localstorage-is-not-defined-error-showing
@@ -122,36 +128,44 @@ const Settings = (): React.ReactElement => {
                         />
                         <form className={classes.form} noValidate>
                             <Grid container spacing={2}>
-                                <Grid item xs={12}>
-                                    <TextField
-                                        required
-                                        fullWidth
-                                        id="userName"
-                                        label="ユーザー名"
-                                        name="diplayName"
-                                        value={editedUserName}
-                                        onChange={(
-                                            e: React.ChangeEvent<HTMLInputElement>
-                                        ) => {
-                                            setEditedUserName(e.target.value)
-                                        }}
-                                    />
-                                </Grid>
-                                <Grid item xs={12}>
-                                    <TextField
-                                        required
-                                        fullWidth
-                                        id="profile"
-                                        label="プロフィール"
-                                        name="profile"
-                                        value={editedProfile}
-                                        onChange={(
-                                            e: React.ChangeEvent<HTMLInputElement>
-                                        ) => {
-                                            setEditedProfile(e.target.value)
-                                        }}
-                                    />
-                                </Grid>
+                                <TextFieldEl
+                                    id="userName"
+                                    label="ユーザー名"
+                                    name="diplayName"
+                                    autoComplete="userName"
+                                    type="text"
+                                    value={editedUserName}
+                                    onChange={(
+                                        e: React.ChangeEvent<HTMLInputElement>
+                                    ) => {
+                                        setEditedUserName(e.target.value)
+                                    }}
+                                    inputRef={register({
+                                        maxLength: vldRules.checkMaxLength20,
+                                    })}
+                                    error={Boolean(errors.newEmail)}
+                                    errors={errors}
+                                />
+                                <TextFieldEl
+                                    id="profile"
+                                    label="プロフィール文"
+                                    name="profile"
+                                    autoComplete="profile"
+                                    type="text"
+                                    value={editedProfile}
+                                    multiline
+                                    rows={4}
+                                    onChange={(
+                                        e: React.ChangeEvent<HTMLInputElement>
+                                    ) => {
+                                        setEditedProfile(e.target.value)
+                                    }}
+                                    inputRef={register({
+                                        maxLength: vldRules.checkMaxLength100,
+                                    })}
+                                    error={Boolean(errors.newEmail)}
+                                    errors={errors}
+                                />
                             </Grid>
                             <Button
                                 variant="contained"
