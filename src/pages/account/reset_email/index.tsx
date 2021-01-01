@@ -5,11 +5,13 @@ import { firebase, fbAuth, fbDb } from 'functions/firebase'
 import {
     Button,
     CssBaseline,
-    TextField,
     Grid,
     makeStyles,
     Container,
 } from '@material-ui/core'
+import TextFieldEl from '../../../components/grid/textFieldEl'
+import { useForm } from 'react-hook-form'
+import { vldRules } from '../../../utils/validationRule'
 
 const useStyles = makeStyles((theme) => ({
     form: {
@@ -29,6 +31,10 @@ const ResetEmail = (): React.ReactElement => {
     const [newEmail, setNewEmail] = useState<string>('')
     const [password, setPassword] = useState<string>('')
     const [, setLoading] = useState<boolean>(false)
+    const { register, errors } = useForm({
+        mode: 'onChange',
+        criteriaMode: 'all',
+    })
 
     const onResetEmail = async (): Promise<void> => {
         try {
@@ -88,52 +94,62 @@ const ResetEmail = (): React.ReactElement => {
                 <Container component="main" maxWidth="xs">
                     <CssBaseline />
                     <Grid container spacing={2}>
-                        <Grid item xs={12}>
-                            <TextField
-                                required
-                                fullWidth
-                                id="oldEmail"
-                                label="現在のメールアドレス"
-                                name="oldEmail"
-                                onChange={(
-                                    e: React.ChangeEvent<HTMLInputElement>
-                                ) => {
-                                    setOldEmail(e.target.value)
-                                }}
-                            />
-                        </Grid>
-                        <Grid item xs={12}>
-                            <TextField
-                                required
-                                fullWidth
-                                id="newEmail"
-                                label="新しいメールアドレス"
-                                name="newEmail"
-                                onChange={(
-                                    e: React.ChangeEvent<HTMLInputElement>
-                                ) => {
-                                    setNewEmail(e.target.value)
-                                }}
-                            />
-                        </Grid>
+                        <TextFieldEl
+                            name="oldEmail"
+                            label="現在のメールアドレス"
+                            id="oldEmail"
+                            autoComplete="oldEmail"
+                            type="text"
+                            onChange={(
+                                e: React.ChangeEvent<HTMLInputElement>
+                            ) => {
+                                setOldEmail(e.target.value)
+                            }}
+                            inputRef={register({
+                                required: vldRules.required,
+                                pattern: vldRules.checkEmail,
+                            })}
+                            error={Boolean(errors.oldEmail)}
+                            errors={errors}
+                        />
+                        <TextFieldEl
+                            name="newEmail"
+                            label="新しいメールアドレス"
+                            id="newEmail"
+                            autoComplete="newEmail"
+                            type="text"
+                            onChange={(
+                                e: React.ChangeEvent<HTMLInputElement>
+                            ) => {
+                                setNewEmail(e.target.value)
+                            }}
+                            inputRef={register({
+                                required: vldRules.required,
+                                pattern: vldRules.checkEmail,
+                            })}
+                            error={Boolean(errors.newEmail)}
+                            errors={errors}
+                        />
                         <p>
                             ※ご指定のメールアドレスに本人確認用メールを送信します。
                         </p>
-                        <Grid item xs={12}>
-                            <TextField
-                                required
-                                fullWidth
-                                id="password"
-                                label="パスワード"
-                                name="password"
-                                type="password"
-                                onChange={(
-                                    e: React.ChangeEvent<HTMLInputElement>
-                                ) => {
-                                    setPassword(e.target.value)
-                                }}
-                            />
-                        </Grid>
+                        <TextFieldEl
+                            name="password"
+                            label="パスワード"
+                            id="password"
+                            autoComplete="password"
+                            type="password"
+                            onChange={(
+                                e: React.ChangeEvent<HTMLInputElement>
+                            ) => {
+                                setPassword(e.target.value)
+                            }}
+                            inputRef={register({
+                                required: vldRules.required,
+                            })}
+                            error={Boolean(errors.password)}
+                            errors={errors}
+                        />
                     </Grid>
                     <Button
                         variant="contained"

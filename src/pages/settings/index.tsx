@@ -37,7 +37,7 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 const Settings = (): React.ReactElement => {
-    checkAuthenticated()
+    //checkAuthenticated()
     const classes = useStyles()
     const { signinAccount } = React.useContext(AuthContext)
     const [editedUserName, setEditedUserName] = useState('')
