@@ -27,6 +27,15 @@
     },
     "ui": {
       "enabled": true
+    },
+    "functions": {
+      "port": 5001
+    },
+    "database": {
+      "port": null
+    },
+    "hosting": {
+      "port": 5000
     }
   }
 }

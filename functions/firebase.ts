@@ -23,5 +23,15 @@ if (!firebase.apps.length) {
 const fbDb = firebase.firestore()
 const fbAuth = firebase.auth()
 const fbStorage = firebase.storage()
+const fbFunc = firebase.functions()
+fbFunc.useFunctionsEmulator('http://localhost:5000')
 
-export { firebase, fbDb, fbAuth, fbStorage }
+const main = async () => {
+    const helloOnCall = fbFunc.httpsCallable('helloOnCall')
+    const res = await helloOnCall({})
+    console.log(res)
+}
+
+main()
+
+export { firebase, fbDb, fbAuth, fbStorage, fbFunc }
