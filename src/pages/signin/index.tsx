@@ -4,6 +4,7 @@ import StyledFirebaseAuth from 'react-firebaseui/StyledFirebaseAuth'
 import Layout from '../../components/layout'
 import { Container } from '@material-ui/core'
 import { AuthContext, checkUnAuthenticated } from '../../auth/AuthProvider'
+import Link from 'next/link'
 
 const Signin = (): React.ReactElement => {
     checkUnAuthenticated()
@@ -27,6 +28,9 @@ const Signin = (): React.ReactElement => {
                             firebaseAuth={firebase.auth()}
                         />
                     </div>
+                    <Link href="/account/reset_password">
+                        <a>パスワードをお忘れの方はこちら</a>
+                    </Link>
                 </header>
             </Container>
         </Layout>

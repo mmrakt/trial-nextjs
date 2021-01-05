@@ -1,9 +1,9 @@
 import React from 'react'
-import Layout from '../../../components/layout'
-import { AuthContext } from '../../../auth/AuthProvider'
+import Layout from '../../../../components/layout'
+import { AuthContext } from '../../../../auth/AuthProvider'
 import { CssBaseline, Container, Typography } from '@material-ui/core'
 
-const ResetEmail = (): React.ReactElement => {
+const Complete = (): React.ReactElement => {
     const { signinAccount } = React.useContext(AuthContext)
     //checkAuthenticated()
     return (
@@ -21,4 +21,4 @@ const ResetEmail = (): React.ReactElement => {
         </Layout>
     )
 }
-export default ResetEmail
+export default Complete

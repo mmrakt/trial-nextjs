@@ -43,7 +43,7 @@ const ResetEmail = (): React.ReactElement => {
             await updateAccountEmailOnFbDB()
             fbAuth.currentUser.sendEmailVerification()
             setTimeout(() => {
-                location.href = '/account/reset_email_complete'
+                location.href = '/account/reset_email/complete'
             }, 2000)
         } catch (error) {
             console.log(error)
