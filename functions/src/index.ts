@@ -1,9 +1,6 @@
 const fbFunc = require('firebase-functions')
 const nodemailer = require('nodemailer')
-//mimura3dev@gmail.com
 const gmailEmail = fbFunc.config().gmail.email
-//const gmailPassword = fbFunc.config().gmail.password
-//mimuraakkun3@gmail.com
 const adminEmail = fbFunc.config().admin.email
 const adminPassword = fbFunc.config().admin.password
 
@@ -13,6 +10,12 @@ const adminPassword = fbFunc.config().admin.password
 export const helloWorld = fbFunc.https.onRequest(
     (request: any, response: any) => {
         fbFunc.logger.info('Hello logs!', { structuredData: true })
+        response.send('Hello from Firebase!')
+    }
+)
+
+exports.helloOnRequest = fbFunc.https.onRequest(
+    (request: any, response: any) => {
         response.send('Hello from Firebase!')
     }
 )

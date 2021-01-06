@@ -68,8 +68,7 @@ const Action = (): React.ReactElement => {
                     await fbAuth.signInWithEmailAndPassword(email, newPassword)
                     console.log('送信開始')
                     //await sendCompletionEmail
-                    fbFunc.useFunctionsEmulator('http://localhost:5000')
-                    const mailer = fbFunc.httpCallable('sendMail')
+                    const mailer = fbFunc.httpsCallable('sendMail')
                     mailer({ email: email })
                         .then(() => {
                             console.log('送信成功')
@@ -79,7 +78,7 @@ const Action = (): React.ReactElement => {
                         })
                     setTimeout(() => {
                         router.push('/account/update_password/complete')
-                    }, 10000)
+                    }, 3000)
                 })
                 .catch((error) => {
                     console.log(error)

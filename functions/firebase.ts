@@ -24,14 +24,6 @@ const fbDb = firebase.firestore()
 const fbAuth = firebase.auth()
 const fbStorage = firebase.storage()
 const fbFunc = firebase.functions()
-fbFunc.useFunctionsEmulator('http://localhost:5000')
-
-const main = async () => {
-    const helloOnCall = fbFunc.httpsCallable('helloOnCall')
-    const res = await helloOnCall({})
-    console.log(res)
-}
-
-main()
+fbFunc.useEmulator('localhost', 5001)
 
 export { firebase, fbDb, fbAuth, fbStorage, fbFunc }

@@ -28,6 +28,7 @@ firestore-debug.log
 ui-debug.log
 firebase-debug.log
 database-debug.log
+pubsub-debug.log
 
 # local env files
 .env
@@ -42,3 +43,4 @@ database-debug.log
 hosting*
 
 src/generated
+.runtimeconfig.json
