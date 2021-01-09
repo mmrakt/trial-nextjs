@@ -10,7 +10,8 @@
 firestore-coverage.html
 
 # next.js
-/.next/
+.next/
+dist/
 /out/
 
 # production

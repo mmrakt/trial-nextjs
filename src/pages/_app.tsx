@@ -51,6 +51,7 @@ export default function MyApp(props: AppProps): React.ReactElement {
                 <ThemeProvider theme={theme}>
                     {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
                     <CssBaseline />
+                    {/* @ts-ignore */}
                     <ApolloProvider client={client}>
                         <AuthProvider>
                             <Component {...pageProps} />
