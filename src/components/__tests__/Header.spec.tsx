@@ -1,6 +1,5 @@
 import React from 'react'
-import { render, cleanup, screen } from '@testing-library/react'
-import Header from '../header/index'
+import { cleanup } from '@testing-library/react'
 import DrawerItem from '../header/drawerItem'
 import Drawer from '../header/drawer'
 import MenuList from '../header/menuList'

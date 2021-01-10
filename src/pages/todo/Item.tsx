@@ -12,7 +12,7 @@ import React from 'react'
 //         done: boolean
 //     }
 // }
-function TodoItem(props): any {
+function TodoItem(): any {
     //     const { todo } = props
 
     return (

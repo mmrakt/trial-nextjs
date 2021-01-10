@@ -25,7 +25,7 @@ import React from 'react'
 //     onDelete: () => void
 //     onChange: (label: string, value: string | number) => void
 // }
-const TaskItem = (props): React.ReactElement => {
+const TaskItem = (): React.ReactElement => {
     //     const { task, hourList, categoryList, onDelete, onChange } = props
 
     //     // NOTE: inputとselect両方から受け取るためanyを指定

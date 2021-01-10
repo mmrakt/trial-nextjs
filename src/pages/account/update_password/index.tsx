@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { fbAuth, fbDb, fbFunc } from '../../../../functions/firebase'
+import { fbAuth, fbFunc } from '../../../../functions/firebase'
 import Layout from '../../../components/layout'
 import {
     Button,

@@ -3,7 +3,7 @@ import firebase from 'firebase'
 import StyledFirebaseAuth from 'react-firebaseui/StyledFirebaseAuth'
 import Layout from '../../components/layout'
 import { Container } from '@material-ui/core'
-import { AuthContext, checkUnAuthenticated } from '../../auth/AuthProvider'
+import { AuthContext } from '../../auth/AuthProvider'
 import Link from 'next/link'
 
 const Signin = (): React.ReactElement => {

@@ -11,7 +11,6 @@ import {
 } from '@material-ui/core'
 import { fbAuth, fbDb } from '../../../functions/firebase'
 import { useRouter } from 'next/router'
-import { AuthContext, checkUnAuthenticated } from '../../auth/AuthProvider'
 import { useForm } from 'react-hook-form'
 import { vldRules } from '../../utils/validationRule'
 import TextFieldEl from '../../components/grid/textFieldEl'
@@ -38,7 +37,6 @@ const useStyles = makeStyles((theme) => ({
 
 const Signup = (): React.ReactElement => {
     const router = useRouter()
-    const { signinAccount } = React.useContext(AuthContext)
     const classes = useStyles()
 
     const [userId, setUserId] = useState('')

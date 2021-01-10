@@ -1,7 +1,6 @@
 import React, { useState } from 'react'
 import Layout from '../../../components/layout'
-import { AuthContext, checkAuthenticated } from '../../../auth/AuthProvider'
-import { firebase, fbAuth, fbDb } from 'functions/firebase'
+import { fbAuth } from 'functions/firebase'
 import {
     Button,
     CssBaseline,

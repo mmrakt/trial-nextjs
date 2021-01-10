@@ -2,7 +2,12 @@ import React from 'react'
 import { useRouter } from 'next/router'
 import { AuthContext } from './AuthProvider'
 
-const ProtectedRoute = ({ children }: { children: React.ReactElement }) => {
+type IProps = {
+    children: React.ReactElement
+}
+
+const ProtectedRoute: React.FC<IProps> = (props) => {
+    const { children } = props
     const { signinAccount } = React.useContext(AuthContext)
 
     if (!signinAccount) {
