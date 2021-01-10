@@ -4,24 +4,21 @@ import { ThemeProvider } from '@material-ui/core/styles'
 import CssBaseline from '@material-ui/core/CssBaseline'
 import theme from '../components/theme'
 import { Provider } from 'react-redux'
-import store from '../store'
+import store from '../store/store'
 import { ApolloClient, InMemoryCache, HttpLink } from '@apollo/client'
 import { ApolloProvider } from '@apollo/react-hooks'
 import 'minireset.css'
 import '../base.css'
 import 'react-calendar/dist/Calendar.css'
 import 'react-toastify/dist/ReactToastify.css'
-import currentUser from '../auth/currentUser'
+import { AuthProvider } from '../auth/AuthProvider'
+import { AppProps } from 'next/app'
 
 export const AuthContext = React.createContext(null)
 
-type IProps = {
-    Component: React.ReactNode
-    pageProps: any
-}
 // NOTE: functionでなくconstにすると下記エラーとなる
 // The default export is not a React Component
-export default function MyApp(props: IProps): React.ReactElement {
+export default function MyApp(props: AppProps): React.ReactElement {
     const { Component, pageProps } = props
 
     React.useEffect(() => {
@@ -35,6 +32,7 @@ export default function MyApp(props: IProps): React.ReactElement {
         return new ApolloClient({
             link: new HttpLink({
                 uri: 'http://localhost:8080/v1/graphql',
+                credentials: 'same-origin',
             }),
             cache: new InMemoryCache(),
         })
@@ -53,13 +51,13 @@ export default function MyApp(props: IProps): React.ReactElement {
                 <ThemeProvider theme={theme}>
                     {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
                     <CssBaseline />
+                    {/* @ts-ignore */}
                     <ApolloProvider client={client}>
-                        <AuthContext.Provider value={currentUser}>
+                        <AuthProvider>
                             <Component {...pageProps} />
-                        </AuthContext.Provider>
+                        </AuthProvider>
                     </ApolloProvider>
                 </ThemeProvider>
-                j
             </Provider>
         </>
     )

@@ -1,9 +1,11 @@
 import React from 'react'
 import { RouterContext } from 'next/dist/next-server/lib/router-context'
+import { NextRouter } from 'next/router'
 import { MockedProvider } from '@apollo/client/testing'
 
 export function withMockedRouter(
-    router, children: React.ReactElement
+    router: Partial<NextRouter> = {},
+    children: React.ReactElement
 ): React.ReactElement {
     const mockedRouter = {
         basePath: '',
@@ -23,14 +25,13 @@ export function withMockedRouter(
             emit: jest.fn(),
         },
         isFallback: false,
-        ...router
+        isReady: true,
+        ...router,
     }
 
     return (
         <RouterContext.Provider value={mockedRouter}>
-             <MockedProvider addTypename={false}>
-                 {children}
-             </MockedProvider>
+            <MockedProvider addTypename={false}>{children}</MockedProvider>
         </RouterContext.Provider>
     )
 }

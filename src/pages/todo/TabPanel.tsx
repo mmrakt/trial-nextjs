@@ -1,5 +1,5 @@
 import React from 'react'
-import TodoItem from './Item'
+//import TodoItem from './Item'
 import List from '@material-ui/core/List'
 import { useSelector } from 'react-redux'
 import { rootState } from '../../rootReducer'
@@ -10,6 +10,7 @@ type Props = {
 function TodoTabPanel(props: Props): any {
     const { status } = props
     const { todos, filter } = useSelector((state: rootState) => state.todos)
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const displayTodos = todos.filter((todo) => {
         if (todo) {
             switch (filter) {
@@ -25,13 +26,13 @@ function TodoTabPanel(props: Props): any {
 
     return (
         <List component="nav" hidden={filter !== status} role="tabpanel">
-            {displayTodos.map((todo, index) => (
-                <TodoItem
-                    data-testid="todoItem"
-                    key={index}
-                    todo={todo}
-                ></TodoItem>
-            ))}
+            {/* {displayTodos.map((todo, index) => (
+                // <TodoItem
+                //     data-testid="todoItem"
+                //     key={index}
+                //     todo={todo}
+                // ></TodoItem>
+            ))} */}
         </List>
     )
 }

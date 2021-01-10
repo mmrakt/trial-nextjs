@@ -1,4 +1,4 @@
-import { createSlice, PayloadAction, configureStore } from '@reduxjs/toolkit'
+import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { Todo } from '../Types'
 
 type State = {
@@ -47,10 +47,6 @@ const todoModule = createSlice({
             state.todos.filter((todo) => todo.key !== action.payload.key)
         },
     },
-})
-
-const store = configureStore({
-    reducer: todoModule.reducer,
 })
 
 export const {

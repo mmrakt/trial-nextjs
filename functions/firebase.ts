@@ -23,5 +23,7 @@ if (!firebase.apps.length) {
 const fbDb = firebase.firestore()
 const fbAuth = firebase.auth()
 const fbStorage = firebase.storage()
+const fbFunc = firebase.functions()
+fbFunc.useEmulator('localhost', 5001)
 
-export { firebase, fbDb, fbAuth, fbStorage }
+export { firebase, fbDb, fbAuth, fbStorage, fbFunc }
