@@ -88,9 +88,8 @@
     }
   },
   "lint-staged": {
-    "*.{js, ts, tsx}": [
-      "eslint --ext .ts,.tsx ./src/",
-      "git add"
+    "*.{js,ts,tsx}": [
+      "eslint --ext .ts,.tsx ./src/"
     ]
   },
   "devDependencies": {
