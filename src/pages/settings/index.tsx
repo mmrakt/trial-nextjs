@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import {} from '@material-ui/core'
 import Layout from '../../components/layout'
-import { AuthContext, checkAuthenticated } from '../../auth/AuthProvider'
+import { AuthContext } from '../../auth/AuthProvider'
 import {
     Button,
     CssBaseline,
@@ -16,6 +16,7 @@ import styled from 'styled-components'
 import { useForm } from 'react-hook-form'
 import TextFieldEl from '../../components/grid/textFieldEl'
 import { vldRules } from '@/utils/validationRule'
+import ProtectedRoute from '../../auth/ProtectedRoute'
 
 const AvatarImg = styled.img`
     border-radius: 50%;
@@ -39,7 +40,6 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 const Settings = (): React.ReactElement => {
-    //checkAuthenticated()
     const classes = useStyles()
     const { signinAccount } = React.useContext(AuthContext)
     const [editedUserName, setEditedUserName] = useState('')
@@ -104,82 +104,86 @@ const Settings = (): React.ReactElement => {
         )
     }
     return (
-        <Layout title="アカウント設定">
-            {signinAccount && (
-                <Container component="main" maxWidth="xs">
-                    <CssBaseline />
-                    <div className={classes.paper}>
-                        {signinAccount.avatarURL ? (
-                            <AvatarImg src={signinAccount.avatarURL} />
-                        ) : (
-                            <AvatarImg src="/profile.png" />
-                        )}
-                        <div>
-                            <input
-                                type="file"
-                                accept="image/*"
-                                onChange={onSelectFile}
+        <ProtectedRoute>
+            <Layout title="アカウント設定">
+                {signinAccount && (
+                    <Container component="main" maxWidth="xs">
+                        <CssBaseline />
+                        <div className={classes.paper}>
+                            {signinAccount.avatarURL ? (
+                                <AvatarImg src={signinAccount.avatarURL} />
+                            ) : (
+                                <AvatarImg src="/profile.png" />
+                            )}
+                            <div>
+                                <input
+                                    type="file"
+                                    accept="image/*"
+                                    onChange={onSelectFile}
+                                />
+                            </div>
+                            <AvatalTrimmingModal
+                                modalIsOpen={modalIsOpen}
+                                onRequestClose={() => setModalIsOpen(false)}
+                                src={src}
                             />
+                            <form className={classes.form} noValidate>
+                                <Grid container spacing={2}>
+                                    <TextFieldEl
+                                        id="userName"
+                                        label="ユーザー名"
+                                        name="diplayName"
+                                        autoComplete="userName"
+                                        type="text"
+                                        value={editedUserName}
+                                        onChange={(
+                                            e: React.ChangeEvent<HTMLInputElement>
+                                        ) => {
+                                            setEditedUserName(e.target.value)
+                                        }}
+                                        inputRef={register({
+                                            maxLength:
+                                                vldRules.checkMaxLength20,
+                                        })}
+                                        error={Boolean(errors.newEmail)}
+                                        errors={errors}
+                                    />
+                                    <TextFieldEl
+                                        id="profile"
+                                        label="プロフィール文"
+                                        name="profile"
+                                        autoComplete="profile"
+                                        type="text"
+                                        value={editedProfile}
+                                        multiline
+                                        rows={4}
+                                        onChange={(
+                                            e: React.ChangeEvent<HTMLInputElement>
+                                        ) => {
+                                            setEditedProfile(e.target.value)
+                                        }}
+                                        inputRef={register({
+                                            maxLength:
+                                                vldRules.checkMaxLength100,
+                                        })}
+                                        error={Boolean(errors.newEmail)}
+                                        errors={errors}
+                                    />
+                                </Grid>
+                                <Button
+                                    variant="contained"
+                                    color="primary"
+                                    className={classes.submit}
+                                    onClick={onUpdateAccountOnFbDB}
+                                >
+                                    更新
+                                </Button>
+                            </form>
                         </div>
-                        <AvatalTrimmingModal
-                            modalIsOpen={modalIsOpen}
-                            onRequestClose={() => setModalIsOpen(false)}
-                            src={src}
-                        />
-                        <form className={classes.form} noValidate>
-                            <Grid container spacing={2}>
-                                <TextFieldEl
-                                    id="userName"
-                                    label="ユーザー名"
-                                    name="diplayName"
-                                    autoComplete="userName"
-                                    type="text"
-                                    value={editedUserName}
-                                    onChange={(
-                                        e: React.ChangeEvent<HTMLInputElement>
-                                    ) => {
-                                        setEditedUserName(e.target.value)
-                                    }}
-                                    inputRef={register({
-                                        maxLength: vldRules.checkMaxLength20,
-                                    })}
-                                    error={Boolean(errors.newEmail)}
-                                    errors={errors}
-                                />
-                                <TextFieldEl
-                                    id="profile"
-                                    label="プロフィール文"
-                                    name="profile"
-                                    autoComplete="profile"
-                                    type="text"
-                                    value={editedProfile}
-                                    multiline
-                                    rows={4}
-                                    onChange={(
-                                        e: React.ChangeEvent<HTMLInputElement>
-                                    ) => {
-                                        setEditedProfile(e.target.value)
-                                    }}
-                                    inputRef={register({
-                                        maxLength: vldRules.checkMaxLength100,
-                                    })}
-                                    error={Boolean(errors.newEmail)}
-                                    errors={errors}
-                                />
-                            </Grid>
-                            <Button
-                                variant="contained"
-                                color="primary"
-                                className={classes.submit}
-                                onClick={onUpdateAccountOnFbDB}
-                            >
-                                更新
-                            </Button>
-                        </form>
-                    </div>
-                </Container>
-            )}
-        </Layout>
+                    </Container>
+                )}
+            </Layout>
+        </ProtectedRoute>
     )
 }
 export default Settings

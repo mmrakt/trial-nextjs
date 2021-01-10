@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import Layout from '../../../components/layout'
-import { AuthContext, checkAuthenticated } from '../../../auth/AuthProvider'
+import { AuthContext } from '../../../auth/AuthProvider'
 import { firebase, fbAuth, fbDb } from 'functions/firebase'
 import {
     Button,
@@ -12,6 +12,7 @@ import {
 import TextFieldEl from '../../../components/grid/textFieldEl'
 import { useForm } from 'react-hook-form'
 import { vldRules } from '../../../utils/validationRule'
+import ProtectedRoute from '../../../auth/ProtectedRoute'
 
 const useStyles = makeStyles((theme) => ({
     form: {
@@ -89,79 +90,81 @@ const ResetEmail = (): React.ReactElement => {
     }
 
     return (
-        <Layout title="メールアドレス変更">
-            {signinAccount && (
-                <Container component="main" maxWidth="xs">
-                    <CssBaseline />
-                    <Grid container spacing={2}>
-                        <TextFieldEl
-                            name="oldEmail"
-                            label="現在のメールアドレス"
-                            id="oldEmail"
-                            autoComplete="oldEmail"
-                            type="text"
-                            onChange={(
-                                e: React.ChangeEvent<HTMLInputElement>
-                            ) => {
-                                setOldEmail(e.target.value)
-                            }}
-                            inputRef={register({
-                                required: vldRules.required,
-                                pattern: vldRules.checkEmail,
-                            })}
-                            error={Boolean(errors.oldEmail)}
-                            errors={errors}
-                        />
-                        <TextFieldEl
-                            name="newEmail"
-                            label="新しいメールアドレス"
-                            id="newEmail"
-                            autoComplete="newEmail"
-                            type="text"
-                            onChange={(
-                                e: React.ChangeEvent<HTMLInputElement>
-                            ) => {
-                                setNewEmail(e.target.value)
-                            }}
-                            inputRef={register({
-                                required: vldRules.required,
-                                pattern: vldRules.checkEmail,
-                            })}
-                            error={Boolean(errors.newEmail)}
-                            errors={errors}
-                        />
-                        <p>
-                            ※ご指定のメールアドレスに本人確認用メールを送信します。
-                        </p>
-                        <TextFieldEl
-                            name="password"
-                            label="パスワード"
-                            id="password"
-                            autoComplete="password"
-                            type="password"
-                            onChange={(
-                                e: React.ChangeEvent<HTMLInputElement>
-                            ) => {
-                                setPassword(e.target.value)
-                            }}
-                            inputRef={register({
-                                required: vldRules.required,
-                            })}
-                            error={Boolean(errors.password)}
-                            errors={errors}
-                        />
-                    </Grid>
-                    <Button
-                        variant="contained"
-                        color="primary"
-                        className={classes.submit}
-                        onClick={onResetEmail}
-                    >
-                        変更する
-                    </Button>
-                </Container>
-            )}
-        </Layout>
+        <ProtectedRoute>
+            <Layout title="メールアドレス変更">
+                {signinAccount && (
+                    <Container component="main" maxWidth="xs">
+                        <CssBaseline />
+                        <Grid container spacing={2}>
+                            <TextFieldEl
+                                name="oldEmail"
+                                label="現在のメールアドレス"
+                                id="oldEmail"
+                                autoComplete="oldEmail"
+                                type="text"
+                                onChange={(
+                                    e: React.ChangeEvent<HTMLInputElement>
+                                ) => {
+                                    setOldEmail(e.target.value)
+                                }}
+                                inputRef={register({
+                                    required: vldRules.required,
+                                    pattern: vldRules.checkEmail,
+                                })}
+                                error={Boolean(errors.oldEmail)}
+                                errors={errors}
+                            />
+                            <TextFieldEl
+                                name="newEmail"
+                                label="新しいメールアドレス"
+                                id="newEmail"
+                                autoComplete="newEmail"
+                                type="text"
+                                onChange={(
+                                    e: React.ChangeEvent<HTMLInputElement>
+                                ) => {
+                                    setNewEmail(e.target.value)
+                                }}
+                                inputRef={register({
+                                    required: vldRules.required,
+                                    pattern: vldRules.checkEmail,
+                                })}
+                                error={Boolean(errors.newEmail)}
+                                errors={errors}
+                            />
+                            <p>
+                                ※ご指定のメールアドレスに本人確認用メールを送信します。
+                            </p>
+                            <TextFieldEl
+                                name="password"
+                                label="パスワード"
+                                id="password"
+                                autoComplete="password"
+                                type="password"
+                                onChange={(
+                                    e: React.ChangeEvent<HTMLInputElement>
+                                ) => {
+                                    setPassword(e.target.value)
+                                }}
+                                inputRef={register({
+                                    required: vldRules.required,
+                                })}
+                                error={Boolean(errors.password)}
+                                errors={errors}
+                            />
+                        </Grid>
+                        <Button
+                            variant="contained"
+                            color="primary"
+                            className={classes.submit}
+                            onClick={onResetEmail}
+                        >
+                            変更する
+                        </Button>
+                    </Container>
+                )}
+            </Layout>
+        </ProtectedRoute>
     )
 }
 export default ResetEmail

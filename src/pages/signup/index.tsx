@@ -39,7 +39,6 @@ const useStyles = makeStyles((theme) => ({
 const Signup = (): React.ReactElement => {
     const router = useRouter()
     const { signinAccount } = React.useContext(AuthContext)
-    checkUnAuthenticated()
     const classes = useStyles()
 
     const [userId, setUserId] = useState('')

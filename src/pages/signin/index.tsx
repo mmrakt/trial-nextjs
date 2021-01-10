@@ -7,8 +7,8 @@ import { AuthContext, checkUnAuthenticated } from '../../auth/AuthProvider'
 import Link from 'next/link'
 
 const Signin = (): React.ReactElement => {
-    checkUnAuthenticated()
     const { signinAccount } = React.useContext(AuthContext)
+    console.log(signinAccount)
     const uiConfig = {
         signInFlow: 'popup',
         signInSuccessUrl: '/',
