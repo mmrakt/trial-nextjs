@@ -23,7 +23,6 @@ const FlexContainer = styled.div`
 
 const Mypage = (): React.ReactElement => {
     const { signinAccount } = React.useContext(AuthContext)
-    //checkAuthenticated()
     return (
         <ProtectedRoute>
             <Layout title="マイページ">

@@ -5,10 +5,16 @@ import Layout from '../../components/layout'
 import { Container } from '@material-ui/core'
 import { AuthContext } from '../../auth/AuthProvider'
 import Link from 'next/link'
+import { useRouter } from 'next/router'
 
 const Signin = (): React.ReactElement => {
     const { signinAccount } = React.useContext(AuthContext)
-    console.log(signinAccount)
+
+    if (signinAccount) {
+        if (typeof window !== 'undefined') {
+            useRouter().push('/')
+        }
+    }
     const uiConfig = {
         signInFlow: 'popup',
         signInSuccessUrl: '/',

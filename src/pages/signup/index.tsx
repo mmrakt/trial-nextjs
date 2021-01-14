@@ -14,6 +14,7 @@ import { useRouter } from 'next/router'
 import { useForm } from 'react-hook-form'
 import { vldRules } from '../../utils/validationRule'
 import TextFieldEl from '../../components/grid/textFieldEl'
+import { AuthContext } from '../../auth/AuthProvider'
 
 const useStyles = makeStyles((theme) => ({
     paper: {
@@ -38,6 +39,7 @@ const useStyles = makeStyles((theme) => ({
 const Signup = (): React.ReactElement => {
     const router = useRouter()
     const classes = useStyles()
+    const { signinAccount } = React.useContext(AuthContext)
 
     const [userId, setUserId] = useState('')
     const [userName, setUserName] = useState('')
@@ -50,6 +52,12 @@ const Signup = (): React.ReactElement => {
         criteriaMode: 'all',
     })
     const onSubmit = (data) => console.log(data)
+
+    if (signinAccount) {
+        if (typeof window !== 'undefined') {
+            useRouter().push('/')
+        }
+    }
 
     const onSignup = async (): Promise<void> => {
         setLoading(false)

@@ -13,6 +13,7 @@ import 'react-calendar/dist/Calendar.css'
 import 'react-toastify/dist/ReactToastify.css'
 import { AuthProvider } from '../auth/AuthProvider'
 import { AppProps } from 'next/app'
+import '../../styles/globals.css'
 
 export const AuthContext = React.createContext(null)
 
