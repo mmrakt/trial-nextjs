@@ -1,18 +1,19 @@
 import React from 'react'
 import {} from '@material-ui/core'
-import { Menu, MenuItem, Avatar, Button } from '@material-ui/core'
+import { Menu, MenuItem, Button } from '@material-ui/core'
 import Link from 'next/link'
 import { AuthContext } from '../../auth/AuthProvider'
 import { fbAuth } from 'functions/firebase'
+import { createPortal } from 'react-dom'
 
 const MenuList = (): React.ReactElement => {
     const { signinAccount } = React.useContext(AuthContext)
-    const [isOpenMenu, setIsOpenMenu] = React.useState(null)
-    const handleClick = (e) => {
-        setIsOpenMenu(e.currentTarget)
+    const [isOpenModal, setIsOpenModal] = React.useState(null)
+    const handleModalOpen = (e) => {
+        setIsOpenModal(e.currentTarget)
     }
     const handleClose = () => {
-        setIsOpenMenu(null)
+        setIsOpenModal(null)
     }
     const handleSignout = React.useCallback(async () => {
         await fbAuth.signOut()
@@ -24,15 +25,27 @@ const MenuList = (): React.ReactElement => {
             <Button
                 aria-controls="simple-menu"
                 aria-haspopup="true"
-                onClick={handleClick}
+                onClick={handleModalOpen}
             >
-                <Avatar></Avatar>
+                {signinAccount && signinAccount.avatarURL ? (
+                    <img
+                        src={signinAccount.avatarURL}
+                        alt="アバター画像"
+                        className="rounded-full w-10"
+                    />
+                ) : (
+                    <img
+                        src="avatar.png"
+                        alt="アバター画像"
+                        className="rounded-full w-10"
+                    />
+                )}
             </Button>
             <Menu
                 id="simple-menu"
-                anchorEl={isOpenMenu}
+                anchorEl={isOpenModal}
                 keepMounted
-                open={Boolean(isOpenMenu)}
+                open={Boolean(isOpenModal)}
                 onClose={handleClose}
             >
                 {signinAccount ? (
@@ -65,4 +78,5 @@ const MenuList = (): React.ReactElement => {
         </>
     )
 }
+
 export default MenuList
