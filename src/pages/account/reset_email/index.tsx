@@ -91,8 +91,8 @@ const ResetEmail = (): React.ReactElement => {
 
     return (
         <ProtectedRoute>
-            <Layout title="メールアドレス変更">
-                {signinAccount && (
+            {signinAccount && (
+                <Layout title="メールアドレス変更">
                     <Container component="main" maxWidth="xs">
                         <CssBaseline />
                         <Grid container spacing={2}>
@@ -162,8 +162,8 @@ const ResetEmail = (): React.ReactElement => {
                             変更する
                         </Button>
                     </Container>
-                )}
-            </Layout>
+                </Layout>
+            )}
         </ProtectedRoute>
     )
 }

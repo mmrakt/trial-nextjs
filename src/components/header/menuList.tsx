@@ -36,7 +36,7 @@ const MenuList = (): React.ReactElement => {
                 ) : (
                     <img
                         src="avatar.png"
-                        alt="アバター画像"
+                        alt="デフォルトのアバター画像"
                         className="rounded-full w-10"
                     />
                 )}

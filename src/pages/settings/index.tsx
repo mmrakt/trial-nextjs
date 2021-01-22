@@ -2,13 +2,7 @@ import React, { useState } from 'react'
 import {} from '@material-ui/core'
 import Layout from '../../components/layout'
 import { AuthContext } from '../../auth/AuthProvider'
-import {
-    Button,
-    CssBaseline,
-    Grid,
-    makeStyles,
-    Container,
-} from '@material-ui/core'
+import { CssBaseline, Grid, makeStyles, Container } from '@material-ui/core'
 import { fbDb, fbAuth } from '../../../functions/firebase'
 import 'react-image-crop/dist/ReactCrop.css'
 import AvatalTrimmingModal from './AvatarTrimmingModal'
@@ -17,6 +11,7 @@ import { useForm } from 'react-hook-form'
 import TextFieldEl from '../../components/grid/textFieldEl'
 import { vldRules } from '@/utils/validationRule'
 import ProtectedRoute from '../../auth/ProtectedRoute'
+import Button from '../../components/Button'
 
 const AvatarImg = styled.img`
     border-radius: 50%;
@@ -74,7 +69,11 @@ const Settings = (): React.ReactElement => {
         }
     }
 
-    const onUpdateAccountOnFbDB = async (): Promise<void> => {
+    const onUpdateAccountOnFbDB = async (
+        event: React.MouseEvent<HTMLButtonElement, MouseEvent>
+    ): Promise<void> => {
+        event.preventDefault()
+
         await fbDb
             .collection('users')
             .doc(fbAuth.currentUser.uid)
@@ -104,7 +103,7 @@ const Settings = (): React.ReactElement => {
         )
     }
     return (
-        <ProtectedRoute>
+        <ProtectedRoute signinAccount={signinAccount}>
             <Layout title="アカウント設定">
                 {signinAccount && (
                     <Container component="main" maxWidth="xs">
@@ -113,7 +112,7 @@ const Settings = (): React.ReactElement => {
                             {signinAccount.avatarURL ? (
                                 <AvatarImg src={signinAccount.avatarURL} />
                             ) : (
-                                <AvatarImg src="/profile.png" />
+                                <AvatarImg src="/avatar.png" />
                             )}
                             <div>
                                 <input
@@ -171,13 +170,9 @@ const Settings = (): React.ReactElement => {
                                     />
                                 </Grid>
                                 <Button
-                                    variant="contained"
-                                    color="primary"
-                                    className={classes.submit}
-                                    onClick={onUpdateAccountOnFbDB}
-                                >
-                                    更新
-                                </Button>
+                                    name="更新"
+                                    onClickEvent={onUpdateAccountOnFbDB}
+                                />
                             </form>
                         </div>
                     </Container>

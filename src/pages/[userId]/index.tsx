@@ -28,26 +28,31 @@ const Mypage = (): React.ReactElement => {
                             )}
                         </div>
                         <div>
-                            <h1 className="leading-tight font-semibold text-3xl">
+                            <h1 className="leading-tight font-semibold text-3xl my-2 mx-2">
                                 {signinAccount.userName}
                             </h1>
-                            <p className="text-grey-500">
+                            <p className="text-grey-500 my-2 mx-2">
                                 @{signinAccount.userId}
                             </p>
+                            <p className="w-60 break-words my-2 mx-2">
+                                {signinAccount.profile}
+                            </p>
                         </div>
-                        <button>
-                            <Link href="/settings">設定</Link>
-                        </button>
+                        <Link href="/settings">
+                            <a className="underline">プロフィール設定</a>
+                        </Link>
                     </div>
                     <ul>
                         <li>
+                            メールアドレスの変更は
                             <Link href="/account/reset_email">
-                                <a>メールアドレスの変更はこちら</a>
+                                <a className="underline">こちら</a>
                             </Link>
                         </li>
                         <li>
+                            アカウントの削除は
                             <Link href="/account/delete">
-                                <a>アカウントの削除はこちら</a>
+                                <a className="underline">こちら</a>
                             </Link>
                         </li>
                     </ul>
