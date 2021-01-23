@@ -9,10 +9,11 @@ import { useRouter } from 'next/router'
 
 const Signin = (): React.ReactElement => {
     const { signinAccount } = React.useContext(AuthContext)
+    const router = useRouter()
 
     if (signinAccount) {
         if (typeof window !== 'undefined') {
-            useRouter().push('/')
+            router.push('/')
         }
     }
     const uiConfig = {

@@ -9,6 +9,7 @@ type IProps = {
     autoComplete: string
     type: string
     value?: string
+    disabled?: boolean
     multiline?: boolean
     rows?: number
     onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void
@@ -25,6 +26,7 @@ const TextFieldEl = (props: IProps): React.ReactElement => {
         autoComplete,
         type,
         value,
+        disabled,
         multiline,
         rows,
         onChange,
@@ -44,6 +46,7 @@ const TextFieldEl = (props: IProps): React.ReactElement => {
                 name={name}
                 type={type}
                 value={value}
+                disabled={disabled}
                 multiline={multiline}
                 rows={rows}
                 autoComplete={autoComplete}

@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useRef } from 'react'
 import {} from '@material-ui/core'
 import { AuthContext } from '../../auth/AuthProvider'
 import { Button } from '@material-ui/core'
@@ -40,6 +40,7 @@ const AvatalTrimmingModal = (props: IProps): React.ReactElement => {
     const [imageRef, setImageRef] = useState<HTMLImageElement | null>(null)
     const [croppedImageUrl, setCroppedImageUrl] = useState<string>('')
     const [croppedBlob, setCroppedBlob] = useState<Blob>(null)
+    const processing = useRef(false)
 
     const onImageLoaded = (image: HTMLImageElement) => {
         setImageRef(image)
@@ -61,7 +62,14 @@ const AvatalTrimmingModal = (props: IProps): React.ReactElement => {
             )
         }
     }
-    const onUploadAvatar = (): void => {
+    const onUploadAvatar = (
+        event: React.MouseEvent<HTMLButtonElement, MouseEvent>
+    ): void => {
+        event.preventDefault()
+        //NOTE: 二重送信防止
+        if (processing.current) return
+        processing.current = true
+
         try {
             fbStorage
                 .ref()
@@ -72,6 +80,7 @@ const AvatalTrimmingModal = (props: IProps): React.ReactElement => {
                         updateAccountAvatarOnFbDB(avatarURL)
                         updateAuthContext(avatarURL)
                         updatePhotoURLOnFbAuth(avatarURL)
+                        processing.current = false
                         onRequestClose()
                     })
                 })
@@ -79,7 +88,7 @@ const AvatalTrimmingModal = (props: IProps): React.ReactElement => {
             console.log(error)
         }
     }
-    const updateAccountAvatarOnFbDB = (avatarURL: string) => {
+    const updateAccountAvatarOnFbDB = (avatarURL: string): void => {
         fbDb.collection('users').doc(fbAuth.currentUser.uid).set(
             {
                 avatarURL,

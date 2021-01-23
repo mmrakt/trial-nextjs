@@ -67,18 +67,20 @@ const AuthProvider = (props: IProps): React.ReactElement => {
 
 // 未ログインで認証が必要な画面にアクセスした際の処理
 const checkAuthenticated = (): void => {
+    const router = useRouter()
     if (typeof window !== 'undefined') {
         if (!fbAuth.currentUser) {
-            useRouter().push('/signin')
+            router.push('/signin')
         }
     }
 }
 
 // ログイン済みでsignin/signup画面にアクセスした際の処理
 const checkUnAuthenticated = (): void => {
+    const router = useRouter()
     if (typeof window !== 'undefined') {
         if (fbAuth.currentUser) {
-            useRouter().push('/')
+            router.push('/')
         }
     }
 }

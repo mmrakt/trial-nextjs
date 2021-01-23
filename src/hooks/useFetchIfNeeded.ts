@@ -1,5 +1,4 @@
 import axios from 'axios'
-import { sendStatusCode } from 'next/dist/next-server/server/api-utils'
 import { useCallback, useEffect, useState } from 'react'
 
 export type FetchedData = {
@@ -16,7 +15,7 @@ export type UseFetchIfNeededPayload = {
 export const useFetchIfNeeded = (
     payload: UseFetchIfNeededPayload
 ): FetchedData | null => {
-    const [data, setData] = useState<FetchedData | null>(null)
+    const [, setData] = useState<FetchedData | null>(null)
     const fetch = useCallback(async () => {
         const fetchedData = await axios.get<FetchedData>('path/to/get', {
             params: payload,

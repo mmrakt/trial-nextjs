@@ -103,7 +103,7 @@ const Settings = (): React.ReactElement => {
         )
     }
     return (
-        <ProtectedRoute signinAccount={signinAccount}>
+        <ProtectedRoute>
             <Layout title="アカウント設定">
                 {signinAccount && (
                     <Container component="main" maxWidth="xs">
@@ -170,7 +170,7 @@ const Settings = (): React.ReactElement => {
                                     />
                                 </Grid>
                                 <Button
-                                    name="更新"
+                                    text="更新"
                                     onClickEvent={onUpdateAccountOnFbDB}
                                 />
                             </form>

@@ -4,7 +4,6 @@ import { Menu, MenuItem, Button } from '@material-ui/core'
 import Link from 'next/link'
 import { AuthContext } from '../../auth/AuthProvider'
 import { fbAuth } from 'functions/firebase'
-import { createPortal } from 'react-dom'
 
 const MenuList = (): React.ReactElement => {
     const { signinAccount } = React.useContext(AuthContext)
