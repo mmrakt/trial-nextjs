@@ -4,6 +4,7 @@ import Layout from '../../components/layout'
 import { AuthContext } from '../../auth/AuthProvider'
 import Link from 'next/link'
 import ProtectedRoute from '../../auth/ProtectedRoute'
+import Image from 'next/image'
 
 const Mypage = (): React.ReactElement => {
     const { signinAccount } = React.useContext(AuthContext)
@@ -14,16 +15,20 @@ const Mypage = (): React.ReactElement => {
                     <div className="flex my-8 space-x-4 mx-auto itmes-center">
                         <div>
                             {signinAccount.avatarURL ? (
-                                <img
-                                    className="shadow-inner w-32 rounded-full"
+                                <Image
+                                    className="shadow-inner rounded-full"
                                     src={signinAccount.avatarURL}
                                     alt="アバター"
+                                    width={150}
+                                    height={150}
                                 />
                             ) : (
-                                <img
-                                    className="shadow-inner w-32 rounded-full"
+                                <Image
+                                    className="shadow-inner rounded-full"
                                     src="avatar.png"
                                     alt="アバター"
+                                    width={150}
+                                    height={150}
                                 />
                             )}
                         </div>

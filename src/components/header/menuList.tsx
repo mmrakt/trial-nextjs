@@ -4,6 +4,7 @@ import { Menu, MenuItem, Button } from '@material-ui/core'
 import Link from 'next/link'
 import { AuthContext } from '../../auth/AuthProvider'
 import { fbAuth } from 'functions/firebase'
+import Image from 'next/image'
 
 const MenuList = (): React.ReactElement => {
     const { signinAccount } = React.useContext(AuthContext)
@@ -27,16 +28,20 @@ const MenuList = (): React.ReactElement => {
                 onClick={handleModalOpen}
             >
                 {signinAccount && signinAccount.avatarURL ? (
-                    <img
+                    <Image
                         src={signinAccount.avatarURL}
                         alt="アバター画像"
-                        className="rounded-full w-10"
+                        width={50}
+                        height={50}
+                        className="rounded-full"
                     />
                 ) : (
-                    <img
-                        src="avatar.png"
+                    <Image
+                        src="/avatar.png"
                         alt="デフォルトのアバター画像"
-                        className="rounded-full w-10"
+                        width={50}
+                        height={50}
+                        className="rounded-full"
                     />
                 )}
             </Button>
