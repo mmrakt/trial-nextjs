@@ -12,6 +12,7 @@ import TextFieldEl from '../../components/grid/textFieldEl'
 import { vldRules } from '@/utils/validationRule'
 import ProtectedRoute from '../../auth/ProtectedRoute'
 import Button from '../../components/Button'
+import { useRouter } from 'next/router'
 
 const AvatarImg = styled.img`
     border-radius: 50%;
@@ -45,6 +46,7 @@ const Settings = (): React.ReactElement => {
         criteriaMode: 'all',
         mode: 'onChange',
     })
+    const router = useRouter()
 
     React.useEffect(() => {
         //NOTE: https://stackoverflow.com/questions/52474208/react-localstorage-is-not-defined-error-showing
@@ -90,7 +92,7 @@ const Settings = (): React.ReactElement => {
             .catch((error) => {
                 console.log(error.message)
             })
-        location.href = `/${signinAccount.userId}`
+        router.push(`/${signinAccount.userId}`)
     }
 
     const updateAccountOnLocalStorage = () => {
@@ -136,7 +138,7 @@ const Settings = (): React.ReactElement => {
                                         type="text"
                                         value={editedUserName}
                                         onChange={(
-                                            e: React.ChangeEvent<HTMLInputElement>
+                                            e: React.FocusEvent<HTMLInputElement>
                                         ) => {
                                             setEditedUserName(e.target.value)
                                         }}
@@ -156,11 +158,7 @@ const Settings = (): React.ReactElement => {
                                         value={editedProfile}
                                         multiline
                                         rows={4}
-                                        onChange={(
-                                            e: React.ChangeEvent<HTMLInputElement>
-                                        ) => {
-                                            setEditedProfile(e.target.value)
-                                        }}
+                                        onChange={setEditedProfile}
                                         inputRef={register({
                                             maxLength:
                                                 vldRules.checkMaxLength100,

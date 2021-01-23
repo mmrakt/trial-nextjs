@@ -13,6 +13,8 @@ type IProps = {
     multiline?: boolean
     rows?: number
     onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void
+    onBlur?: (any) => void
+    onFocus?: (any) => void
     inputRef?: (ref: any) => void
     error?: boolean
     errors?: any
@@ -30,6 +32,8 @@ const TextFieldEl = (props: IProps): React.ReactElement => {
         multiline,
         rows,
         onChange,
+        onBlur,
+        onFocus,
         inputRef,
         error,
         errors,
@@ -51,6 +55,8 @@ const TextFieldEl = (props: IProps): React.ReactElement => {
                 rows={rows}
                 autoComplete={autoComplete}
                 onChange={onChange}
+                onBlur={onBlur}
+                onFocus={onFocus}
                 inputRef={inputRef}
                 error={error}
             />

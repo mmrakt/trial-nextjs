@@ -1,14 +1,17 @@
 import React from 'react'
 import {} from '@material-ui/core'
-import { Menu, MenuItem, Button } from '@material-ui/core'
+import { Menu, MenuItem } from '@material-ui/core'
 import Link from 'next/link'
 import { AuthContext } from '../../auth/AuthProvider'
 import { fbAuth } from 'functions/firebase'
 import Image from 'next/image'
+import { useRouter } from 'next/router'
 
 const MenuList = (): React.ReactElement => {
     const { signinAccount } = React.useContext(AuthContext)
     const [isOpenModal, setIsOpenModal] = React.useState(null)
+    const router = useRouter()
+
     const handleModalOpen = (e) => {
         setIsOpenModal(e.currentTarget)
     }
@@ -17,34 +20,23 @@ const MenuList = (): React.ReactElement => {
     }
     const handleSignout = React.useCallback(async () => {
         await fbAuth.signOut()
-        location.href = '/'
+        router.push('/')
     }, [])
 
     return (
         <>
-            <Button
-                aria-controls="simple-menu"
-                aria-haspopup="true"
+            <Image
+                src={
+                    signinAccount && signinAccount.avatarURL
+                        ? signinAccount.avatarURL
+                        : '/avatar.png'
+                }
+                alt="アバター画像"
+                width={50}
+                height={50}
+                className="rounded-full"
                 onClick={handleModalOpen}
-            >
-                {signinAccount && signinAccount.avatarURL ? (
-                    <Image
-                        src={signinAccount.avatarURL}
-                        alt="アバター画像"
-                        width={50}
-                        height={50}
-                        className="rounded-full"
-                    />
-                ) : (
-                    <Image
-                        src="/avatar.png"
-                        alt="デフォルトのアバター画像"
-                        width={50}
-                        height={50}
-                        className="rounded-full"
-                    />
-                )}
-            </Button>
+            />
             <Menu
                 id="simple-menu"
                 anchorEl={isOpenModal}
