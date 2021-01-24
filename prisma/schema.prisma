@@ -1,0 +1,16 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+datasource db {
+  provider = "postgresql"
+  url      = env("PRISMA_DB_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Tweet {
+  id      Int    @id @default(autoincrement())
+  content String
+}
