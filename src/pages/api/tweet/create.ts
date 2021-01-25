@@ -1,5 +1,5 @@
 import type { NextApiHandler } from 'next'
-import prisma from '../../lib/prisma'
+import prisma from '../../../lib/prisma'
 
 const handler: NextApiHandler = async ({ body }: { body: string }, res) => {
     try {
