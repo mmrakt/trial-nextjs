@@ -5,9 +5,9 @@ import { ErrorMessage } from '@hookform/error-message'
 type IProps = {
     name: string
     label: string
-    id: string
-    autoComplete: string
-    type: string
+    id?: string
+    autoComplete?: string
+    type?: string
     value?: string
     disabled?: boolean
     multiline?: boolean
