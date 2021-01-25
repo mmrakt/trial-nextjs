@@ -13,8 +13,11 @@
     "test": "jest --watch",
     "test:coverage": "jest --collect-coverage",
     "hasuracli": "hasura console --project hasura",
-    "fb-init": "firebase init",
-    "fb-emulate": "firebase emulators:start"
+    "fb:init": "firebase init",
+    "fb:emulate": "firebase emulators:start",
+    "prisma:dev": "prisma:migrate && prisma:studio",
+    "prisma:migrate": "prisma migrate dev --preview-feature",
+    "prisma:studio": "prisma studio"
   },
   "dependencies": {
     "@apollo/client": "^3.3.6",
@@ -77,6 +80,7 @@
     "react-hook-form": "^6.14.0",
     "react-image-crop": "^8.6.6",
     "react-modal": "^3.12.1",
+    "react-query": "^3.6.0",
     "react-redux": "^7.2.2",
     "react-router-dom": "^5.2.0",
     "react-tabs": "^3.1.2",
