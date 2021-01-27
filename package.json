@@ -17,7 +17,9 @@
     "fb:emulate": "firebase emulators:start",
     "prisma:dev": "prisma:migrate && prisma:studio",
     "prisma:migrate": "prisma migrate dev --preview-feature",
-    "prisma:studio": "prisma studio"
+    "prisma:seed": "prisma db seed --preview-feature",
+    "prisma:studio": "prisma studio",
+    "dev:db": "concurrently \"make up\" \"next dev\" \"yarn run prisma:studio\" "
   },
   "dependencies": {
     "@apollo/client": "^3.3.6",
@@ -38,7 +40,7 @@
     "@testing-library/user-event": "^12.6.0",
     "@types/enzyme-adapter-react-16": "^1.0.6",
     "@types/jest": "^26.0.19",
-    "@types/node": "^14.14.20",
+    "@types/node": "^14.14.22",
     "@types/react": "^17.0.0",
     "@types/react-redux": "^7.1.15",
     "@types/react-test-renderer": "^17.0.0",
@@ -50,6 +52,7 @@
     "babel-plugin-styled-components": "^1.12.0",
     "concurrently": "^5.3.0",
     "date-fns": "^2.16.1",
+    "dayjs": "^1.10.4",
     "dotenv": "^8.2.0",
     "enzyme": "^3.11.0",
     "enzyme-adapter-react-16": "^1.15.5",
@@ -109,7 +112,8 @@
     "@graphql-codegen/typescript-operations": "^1.17.13",
     "@graphql-codegen/typescript-react-apollo": "^2.2.1",
     "@prisma/cli": "^2.15.0",
-    "@types/autosize": "^3.0.7"
+    "@types/autosize": "^3.0.7",
+    "ts-node": "^9.1.1"
   },
   "moduleDirectories": [
     "node_modules",
