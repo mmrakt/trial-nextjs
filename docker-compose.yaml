@@ -27,7 +27,7 @@ services:
     prisma-postgres:
         image: postgres:12
         ports:
-            - '5430:5430'
+            - '5432:5432'
         restart: always
         environment:
             POSTGRES_USER: ${POSTGRES_USER}
