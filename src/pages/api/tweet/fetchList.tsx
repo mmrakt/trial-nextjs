@@ -6,7 +6,11 @@ export default async (
     res: NextApiResponse
 ): Promise<void> => {
     if (req.method === 'GET') {
-        const tweetList = await prisma.tweet.findMany()
+        const tweetList = await prisma.tweet.findMany({
+            orderBy: {
+                updatedAt: 'desc',
+            },
+        })
         return res.status(200).json(tweetList)
     }
 }
