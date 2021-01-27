@@ -10,7 +10,18 @@ generator client {
   provider = "prisma-client-js"
 }
 
+model User {
+  id        String   @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  name      String
+  profile   String?
+  avatarUrl String?
+}
+
 model Tweet {
-  id      Int    @id @default(autoincrement())
-  content String
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  content   String
 }
