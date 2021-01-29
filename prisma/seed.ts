@@ -9,6 +9,11 @@ const seed = async (): Promise<void> => {
             name: 'testuser01',
             profile: 'testtest',
             avatarUrl: '',
+            tweetList: {
+                create: {
+                    content: 'ほげほげ',
+                },
+            },
         },
         select: { id: true, name: true, profile: true },
     })
@@ -20,6 +25,11 @@ const seed = async (): Promise<void> => {
             name: 'testuser02',
             profile: 'testtesttest',
             avatarUrl: '',
+            tweetList: {
+                create: {
+                    content: 'ふがふが',
+                },
+            },
         },
         select: { id: true, name: true, profile: true },
     })
@@ -31,6 +41,11 @@ const seed = async (): Promise<void> => {
             name: 'testuser03',
             profile: 'testtesttest',
             avatarUrl: '',
+            tweetList: {
+                create: {
+                    content: 'ぴよぴよ',
+                },
+            },
         },
         select: { id: true, name: true, profile: true },
     })

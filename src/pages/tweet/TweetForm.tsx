@@ -16,6 +16,7 @@ const TweetForm = (): React.ReactElement => {
         },
         {
             onSuccess: () => {
+                //クエリのキャッシュの無効化
                 queryClient.invalidateQueries('tweetList')
             },
         }
