@@ -39,9 +39,14 @@ const TweetForm = (): React.ReactElement => {
                 ref={inputRef}
             ></textarea>
             <Button
-                className="float-right"
+                className={
+                    content === ''
+                        ? 'disabled:opacity-50 float-right'
+                        : 'float-right'
+                }
                 text="つぶやく"
                 onClickEvent={(event) => onTweet(event)}
+                disabledButton={content === '' ? true : false}
             />
             <p className="clear-right"></p>
         </div>

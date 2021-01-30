@@ -1,22 +1,23 @@
 import React from 'react'
 import {} from '@material-ui/core'
-import { Menu, MenuItem } from '@material-ui/core'
+import { MenuItem } from '@material-ui/core'
 import Link from 'next/link'
 import { AuthContext } from '../../auth/AuthProvider'
 import { fbAuth } from 'functions/firebase'
 import Image from 'next/image'
 import { useRouter } from 'next/router'
+import Modal from '../Modal'
 
 const MenuList = (): React.ReactElement => {
     const { signinAccount } = React.useContext(AuthContext)
-    const [isOpenModal, setIsOpenModal] = React.useState(null)
+    const [isOpenModal, toggleModal] = React.useState(null)
     const router = useRouter()
 
     const handleModalOpen = (e) => {
-        setIsOpenModal(e.currentTarget)
+        toggleModal(e.currentTarget)
     }
-    const handleClose = () => {
-        setIsOpenModal(null)
+    const handleModalClose = () => {
+        toggleModal(null)
     }
     const handleSignout = React.useCallback(async () => {
         await fbAuth.signOut()
@@ -37,40 +38,34 @@ const MenuList = (): React.ReactElement => {
                 className="rounded-full"
                 onClick={handleModalOpen}
             />
-            <Menu
-                id="simple-menu"
-                anchorEl={isOpenModal}
-                keepMounted
-                open={Boolean(isOpenModal)}
-                onClose={handleClose}
-            >
+            <Modal isOpenModal={isOpenModal} toggleModal={toggleModal}>
                 {signinAccount ? (
                     // NOTE: Material-uiのコンポーネント内でfragmentを使うとエラーになる
                     <div>
-                        <MenuItem onClick={handleClose}>
+                        <MenuItem onClick={handleModalClose}>
                             <Link href={`/${signinAccount.userId}`}>
                                 <a>マイページ</a>
                             </Link>
                         </MenuItem>
-                        <MenuItem onClick={handleClose}>
+                        <MenuItem onClick={handleModalClose}>
                             <a onClick={handleSignout}>ログアウト</a>
                         </MenuItem>
                     </div>
                 ) : (
                     <div>
-                        <MenuItem onClick={handleClose}>
+                        <MenuItem onClick={handleModalClose}>
                             <Link href="/signin">
                                 <a>ログイン</a>
                             </Link>
                         </MenuItem>
-                        <MenuItem onClick={handleClose}>
+                        <MenuItem onClick={handleModalClose}>
                             <Link href="/signup">
                                 <a>ユーザー登録</a>
                             </Link>
                         </MenuItem>
                     </div>
                 )}
-            </Menu>
+            </Modal>
         </>
     )
 }
