@@ -35,7 +35,6 @@ const TweetItem = ({ tweet }: { tweet: Tweet }): React.ReactElement => {
     const handleDeleteTweet = (
         event: React.MouseEvent<HTMLParagraphElement, MouseEvent>
     ): void => {
-        console.log('delete tweet')
         event.preventDefault()
         mutate()
     }
@@ -63,6 +62,9 @@ const TweetItem = ({ tweet }: { tweet: Tweet }): React.ReactElement => {
                             <p onClick={handleDeleteTweet}>
                                 このツイートを削除
                             </p>
+                        </MenuItem>
+                        <MenuItem>
+                            <p>共有</p>
                         </MenuItem>
                     </Modal>
                 </div>
