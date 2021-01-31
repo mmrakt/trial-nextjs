@@ -2,20 +2,42 @@ import React, { useState } from 'react'
 import { Tweet } from '@prisma/client'
 import dayjs from 'dayjs'
 import Image from 'next/image'
-import { useQuery } from 'react-query'
+import { useQuery, useMutation, useQueryClient } from 'react-query'
 import { User as IUser } from '@prisma/client'
 import MoreHorizIcon from '@material-ui/icons/MoreHoriz'
+import { MenuItem } from '@material-ui/core'
+import Modal from '../../components/Modal'
 
 const TweetItem = ({ tweet }: { tweet: Tweet }): React.ReactElement => {
-    const [isModalOpen, openModal] = useState<boolean>(false)
+    const [isOpenModal, toggleModal] = React.useState(null)
+    const queryClient = useQueryClient()
     const { data: user, isLoading } = useQuery<IUser>('user', async () => {
         const res = await fetch(`/api/user/fetch/?id=${tweet.userId}`)
         return res.json()
     })
     if (isLoading) return <span>Loading...</span>
+    const { mutate } = useMutation(
+        () => {
+            return fetch(`/api/tweet/delete/?id=${tweet.id}`, {
+                method: 'POST',
+            })
+        },
+        {
+            onSuccess: () => {
+                queryClient.invalidateQueries('tweetList')
+            },
+        }
+    )
 
-    const handleToggleModal = (): void => {
-        openModal(!isModalOpen)
+    const handleModalOpen = (e) => {
+        toggleModal(e.currentTarget)
+    }
+    const handleDeleteTweet = (
+        event: React.MouseEvent<HTMLParagraphElement, MouseEvent>
+    ): void => {
+        console.log('delete tweet')
+        event.preventDefault()
+        mutate()
     }
 
     return (
@@ -34,9 +56,15 @@ const TweetItem = ({ tweet }: { tweet: Tweet }): React.ReactElement => {
                     {dayjs(tweet.createdAt).format('YYYY/MM/DD HH:mm:ss')}
                     <MoreHorizIcon
                         className="float-right"
-                        onClick={handleToggleModal}
+                        onClick={handleModalOpen}
                     />
-                    {isModalOpen && <div>hogehoge</div>}
+                    <Modal isOpenModal={isOpenModal} toggleModal={toggleModal}>
+                        <MenuItem>
+                            <p onClick={handleDeleteTweet}>
+                                このツイートを削除
+                            </p>
+                        </MenuItem>
+                    </Modal>
                 </div>
                 <div className="text-xl">{tweet.content}</div>
             </div>

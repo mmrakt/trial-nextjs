@@ -4,7 +4,7 @@ import { Menu, MenuItem } from '@material-ui/core'
 
 type IProps = {
     isOpenModal: Element
-    toggleModal: (any) => void
+    toggleModal: (boolean) => void
     children: React.ReactNode
 }
 
