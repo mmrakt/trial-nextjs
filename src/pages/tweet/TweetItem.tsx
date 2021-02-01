@@ -11,11 +11,6 @@ import Modal from '../../components/Modal'
 const TweetItem = ({ tweet }: { tweet: Tweet }): React.ReactElement => {
     const [isOpenModal, toggleModal] = React.useState(null)
     const queryClient = useQueryClient()
-    const { data: user, isLoading } = useQuery<IUser>('user', async () => {
-        const res = await fetch(`/api/user/fetch/?id=${tweet.userId}`)
-        return res.json()
-    })
-    if (isLoading) return <span>Loading...</span>
     const { mutate } = useMutation(
         () => {
             return fetch(`/api/tweet/delete/?id=${tweet.id}`, {
@@ -38,6 +33,11 @@ const TweetItem = ({ tweet }: { tweet: Tweet }): React.ReactElement => {
         event.preventDefault()
         mutate()
     }
+    const { data: user, isLoading } = useQuery<IUser>('user', async () => {
+        const res = await fetch(`/api/user/fetch/?id=${tweet.userId}`)
+        return res.json()
+    })
+    if (isLoading) return <span>Loading...</span>
 
     return (
         <div className="flex my-4 mx-2 py-2 px-2">
