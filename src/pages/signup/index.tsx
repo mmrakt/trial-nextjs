@@ -15,6 +15,7 @@ import { useForm } from 'react-hook-form'
 import { vldRules } from '../../utils/validationRule'
 import TextFieldEl from '../../components/grid/textFieldEl'
 import { AuthContext } from '../../auth/AuthProvider'
+import { useMutation } from 'react-query'
 
 const useStyles = makeStyles((theme) => ({
     paper: {
@@ -55,7 +56,7 @@ const Signup = (): React.ReactElement => {
 
     if (signinAccount) {
         if (typeof window !== 'undefined') {
-            useRouter().push('/')
+            router.push('/')
         }
     }
 
@@ -71,12 +72,13 @@ const Signup = (): React.ReactElement => {
                         })
                     })
 
-                fbDb.collection('users').doc(fbAuth.currentUser.uid).set({
-                    userId: userId,
-                    userName: userName,
-                    email: email,
-                })
-                router.push(`/{$fbAuth.currentUser.uid}`)
+                // fbDb.collection('users').doc(fbAuth.currentUser.uid).set({
+                //     userId: userId,
+                //     userName: userName,
+                //     email: email,
+                // })
+                await mutate()
+                router.push(`/${fbAuth.currentUser.uid}`)
             } catch (error) {
                 console.log(error)
             } finally {
@@ -84,6 +86,16 @@ const Signup = (): React.ReactElement => {
             }
         }
     }
+
+    const { mutate } = useMutation(() => {
+        return fetch('/api/user/create', {
+            method: 'POST',
+            body: JSON.stringify({
+                id: userId,
+                name: userName,
+            }),
+        })
+    })
 
     return (
         <Layout title="ユーザー登録">
