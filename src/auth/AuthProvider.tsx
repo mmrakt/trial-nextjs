@@ -66,7 +66,7 @@ const AuthProvider = (props: IProps): React.ReactElement => {
 }
 
 // 未ログインで認証が必要な画面にアクセスした際の処理
-const checkAuthenticated = (): void => {
+const CheckAuthenticated = (): void => {
     const router = useRouter()
     if (typeof window !== 'undefined') {
         if (!fbAuth.currentUser) {
@@ -76,7 +76,7 @@ const checkAuthenticated = (): void => {
 }
 
 // ログイン済みでsignin/signup画面にアクセスした際の処理
-const checkUnAuthenticated = (): void => {
+const CheckUnAuthenticated = (): void => {
     const router = useRouter()
     if (typeof window !== 'undefined') {
         if (fbAuth.currentUser) {
@@ -85,4 +85,4 @@ const checkUnAuthenticated = (): void => {
     }
 }
 
-export { AuthContext, AuthProvider, checkAuthenticated, checkUnAuthenticated }
+export { AuthContext, AuthProvider, CheckAuthenticated, CheckUnAuthenticated }
